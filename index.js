@@ -59,3 +59,16 @@ for (let i = 1; i <= 18; i++) {
     doc.text(tx, ty, getHourStr(getHour()));
 }
 
+// Draw dots in brain dump area
+doc.setDrawColor(200, 200, 200);
+const bdcolumns = Math.ceil(59 / (ch / 2));
+const bdcolw = 59 / bdcolumns;
+console.log('columns:', bdcolumns);
+const bdrows = Math.ceil(ch * 16 / (ch / 2));
+console.log('rows:', bdrows);
+for (let i = 1; i < bdcolumns; i++) {
+    for (let j = 1; j < bdrows; j++) {
+        doc.rect(10 + i*bdcolw, (tpby + ch * 4) + j*ch/2, 0.2, 0.2);
+    }
+}
+
