@@ -1,3 +1,14 @@
+/*
+ * Simple code made inside http://raw.githack.com/MrRio/jsPDF/master/
+ * to generate clean pdf file for timebox daily planning 
+ * 
+ * - Copy all the code
+ * - Go to jsPDF Live Demo http://raw.githack.com/MrRio/jsPDF/master/ page
+ * - Replace everything with copied code
+ *
+ * Adjust the variables if you need different day starting hour
+ */
+
 var doc = new jsPDF({
     format: 'a5',
 });
