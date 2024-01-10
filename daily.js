@@ -37,6 +37,26 @@ function getHourStr(hour) {
   if (hour < 10) return `0${hour}`;
   return `${hour}`;
 }
+	
+/**
+ * @param cols: amount of columns to fit in x axis, 5 columns means 4 lines of dots
+ * @param rows: amount of dots to fit y axis, 2 rows means single line of dots
+ */
+function drawDots(x, y, w, h, cols, rows) {
+    const columnWidth = w / cols;
+    const rowHeight = h / rows;
+
+    doc.setDrawColor(200, 200, 200); // grey color for dots
+
+	for (let c = 1; c < cols; c++) {
+		for (let r = 1; r < rows; r++) {
+			doc.rect(x + columnWidth * c, y + rowHeight * r, 0.2, 0.2);
+
+		}
+	}
+
+    doc.setDrawColor(0, 0, 0); // return black color
+}
 
 doc.text(10, 12, 'Top priorities:');
 doc.rect(10, tpby, 59, ch * 3);
@@ -45,6 +65,10 @@ doc.line(10, tpby + ch * 2, 69, tpby + ch * 2);
 
 doc.text(10, 49, 'Brain dump:');
 doc.rect(10, tpby + ch * 4, 59, ch * 16);
+const bdcolumns = Math.ceil(59 / (ch / 2));
+const bdrows = Math.ceil(ch * 16 / (ch / 2));
+drawDots(10, tpby + ch * 4, 59, ch * 16, bdcolumns, bdrows) 
+
 
 doc.text(79, 12, 'Date:');
 doc.line(89, 15, 138, 15);
@@ -61,25 +85,25 @@ doc.line(79 + ch + aw, tpby + ch, 79 + ch + aw, tpby + ch * 20); // Vertical lin
 const tx = 79 + ch/2 - 2; // Hour text X coordinate
 doc.text(tx, tpby + ch + ch/2 + 1, getHourStr(getHour()));
 
+const bdcols = Math.ceil(aw / (ch / 2));
+console.log('bdcols:', bdcols, aw, ch);
+const bdrws = 2;
+console.log('bdrws:', bdrws);
+
+
 // Draw cells in the actions table
 for (let i = 1; i <= 18; i++) {
     const y = tpby + ch * (1 + i);
     doc.line(79, y, 79 + 59 ,y);
     
+    if (i == 1) {
+        drawDots(79 + ch, y - ch, aw, ch, bdcols, bdrws);
+        drawDots(79 + ch + aw, y - ch, aw, ch, bdcols, bdrws);
+    }
+    
+    drawDots(79 + ch, y, aw, ch, bdcols, bdrws);
+    drawDots(79 + ch + aw, y, aw, ch, bdcols, bdrws);
+    
     const ty = y + ch/2 + 1;
     doc.text(tx, ty, getHourStr(getHour()));
 }
-
-// Draw dots in brain dump area
-doc.setDrawColor(200, 200, 200);
-const bdcolumns = Math.ceil(59 / (ch / 2));
-const bdcolw = 59 / bdcolumns;
-console.log('columns:', bdcolumns);
-const bdrows = Math.ceil(ch * 16 / (ch / 2));
-console.log('rows:', bdrows);
-for (let i = 1; i < bdcolumns; i++) {
-    for (let j = 1; j < bdrows; j++) {
-        doc.rect(10 + i*bdcolw, (tpby + ch * 4) + j*ch/2, 0.2, 0.2);
-    }
-}
-

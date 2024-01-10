@@ -38,6 +38,26 @@ function getHourStr(hour) {
   return `${hour}`;
 }
 
+/**
+ * @param cols: amount of columns to fit in x axis, 5 columns means 4 lines of dots
+ * @param rows: amount of dots to fit y axis, 2 rows means single line of dots
+ */
+function drawDots(x, y, w, h, cols, rows) {
+    const columnWidth = w / cols;
+    const rowHeight = h / rows;
+
+    doc.setDrawColor(200, 200, 200); // grey color for dots
+
+	for (let c = 1; c < cols; c++) {
+		for (let r = 1; r < rows; r++) {
+			doc.rect(x + columnWidth * c, y + rowHeight * r, 0.2, 0.2);
+
+		}
+	}
+
+    doc.setDrawColor(0, 0, 0); // return black color
+}
+
 doc.text(10, 12, 'Top priorities:');
 doc.rect(10, tpby, 59, ch * 3);
 doc.line(10, tpby + ch, 69, tpby + ch);
@@ -49,13 +69,8 @@ doc.rect(10, tpby + ch * 4, 59, ch * 16);
 // Draw dots in brain dump area
 doc.setDrawColor(200, 200, 200);
 const bdcolumns = Math.ceil(59 / (ch / 2));
-const bdcolw = 59 / bdcolumns;
 const bdrows = Math.ceil(ch * 16 / (ch / 2));
-for (let i = 1; i < bdcolumns; i++) {
-    for (let j = 1; j < bdrows; j++) {
-        doc.rect(10 + i*bdcolw, (tpby + ch * 4) + j*ch/2, 0.2, 0.2);
-    }
-}
+drawDots(10, tpby + ch * 4, 59, ch * 16, bdcolumns, bdrows);
 
 doc.setDrawColor(0, 0, 0);
 
@@ -69,9 +84,7 @@ doc.rect(79, tpby + ch, 59, weekHeight); // Table rectangle
 doc.line(79 + 59 / 2, tpby + ch, 79 + 59 / 2, tpby + ch + weekHeight);
 
 const weeklyDayColumns = Math.ceil(59 / 2 / (ch / 2));
-const weeklyDayColumnWight = 59 / 2 / weeklyDayColumns;
 const weeklyDayRows = 3;
-const weeklyDayRowHeight = weekDayHeight / weeklyDayRows;
 
 // Draw cells in the actions table
 for (let i = 1; i <= 15; i++) {
@@ -79,22 +92,7 @@ for (let i = 1; i <= 15; i++) {
     doc.setDrawColor(0, 0, 0);
     doc.line(79, y, 79 + 59 ,y);
     
-    // Draw dots in brain dump area
-    doc.setDrawColor(200, 200, 200);
-    for (let i2 = 1; i2 < weeklyDayColumns; i2++) {
-        for (let j = 1; j < weeklyDayRows; j++) {
-            doc.rect(
-                79 + i2*weeklyDayColumnWight,
-                (y - weekDayHeight) + j*weeklyDayRowHeight,
-                0.2,
-                0.2
-            );
-            doc.rect(
-                79 + 59/2 + i2*weeklyDayColumnWight,
-                (y - weekDayHeight) + j*weeklyDayRowHeight,
-                0.2,
-                0.2
-            )
-        }
-    }
+    drawDots(79, y - weekDayHeight, 59 / 2, weekDayHeight, weeklyDayColumns, weeklyDayRows);
+    drawDots(79 + 59/2, y - weekDayHeight, 59 / 2, weekDayHeight, weeklyDayColumns, weeklyDayRows);
 }
+
