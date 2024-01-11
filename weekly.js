@@ -93,5 +93,8 @@ for (let i = 1; i < 7; i++) {
     doc.line(79, y, 79 + 59 ,y);
     
     // Draw dots in week day area
-    drawDots(79, y - weekDayHeight, 59, weekDayHeight, weeklyDayColumns, weeklyDayRows);
+    if (i == 1) {
+        drawDots(79, y - weekDayHeight, 59, weekDayHeight, weeklyDayColumns, weeklyDayRows);
+    }
+    drawDots(79, y, 59, weekDayHeight, weeklyDayColumns, weeklyDayRows);
 }
