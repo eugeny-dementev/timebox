@@ -1,4 +1,5 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script type="module">
-  import { hello } from './daily.js'; // Or the extension could be just `.js`
+  import('./daily.js')
+  	.then(() => console.log('module imported')); // Or the extension could be just `.js`
 </script>

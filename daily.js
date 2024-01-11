@@ -9,7 +9,14 @@
  * Adjust the variables if you need different day starting hour
  */
 
-var doc = new jsPDF({
+let JSPDF = null;
+try {
+	JSPDF = jsPDF;
+} catch (e) {
+	JSPDF = jspdf.jsPDF;
+}
+
+var doc = new JSPDF({
     format: 'a5',
 });
 doc.setFontSize(10);
