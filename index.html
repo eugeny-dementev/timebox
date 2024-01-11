@@ -1,5 +1,60 @@
+<html>
+<head>
+  <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script type="module">
   import('./daily.js')
   	.then(() => console.log('module imported')); // Or the extension could be just `.js`
 </script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"></link>
+</head>
+<body class="bg-gray-800 m-8">
+  <div class="flex items-center mb-4">
+    <span class="text-white mr-4">Type:</span>
+    <div class="inline-flex" id="buttonGroup">
+      <button class="text-white bg-gray-600 hover:bg-gray-500 px-4 py-2 border border-gray-600 rounded-l focus:outline-none" onclick="selectButton(this)">day</button>
+      <button class="text-white bg-gray-700 hover:bg-gray-600 px-4 py-2 border border-gray-700 focus:outline-none" onclick="selectButton(this)">week</button>
+      <button class="text-white bg-gray-700 hover:bg-gray-600 px-4 py-2 border border-gray-700 focus:outline-none" onclick="selectButton(this)">month</button>
+      <button class="text-white bg-gray-700 hover:bg-gray-600 px-4 py-2 border border-gray-700 focus:outline-none" onclick="selectButton(this)">quarter</button>
+      <button class="text-white bg-gray-700 hover:bg-gray-600 px-4 py-2 border border-gray-700 rounded-r focus:outline-none" onclick="selectButton(this)">year</button>
+    </div>
+  </div>
+  
+  <div class="flex items-center mb-4">
+    <span class="text-white mr-4">Texts:</span>
+    <input type="checkbox" id="textsCheckbox" checked class="w-5 h-5 text-blue-600 bg-gray-700 border-gray-600 rounded focus:ring-blue-500">
+  </div>
+  
+  <div class="flex items-center">
+    <span class="text-white mr-4">Spacings:</span>
+    <input type="number" id="spacing" class="w-14 p-2 text-black rounded focus:outline-none" placeholder="0">
+    <span class="text-white ml-2 mr-8">mm</span>
+    <span class="text-white mr-4">in between:</span>
+    <input type="number" id="inBetween" class="w-14 p-2 text-black rounded focus:outline-none" placeholder="0">
+    <span class="text-white ml-2">mm</span>
+  </div>
+
+  <script>
+    function selectButton(selectedButton) {
+      // Remove the bg-gray-600 class and adjust border color for all buttons
+      let buttons = document.getElementById('buttonGroup').children;
+      for (let button of buttons) {
+        button.classList.remove('bg-gray-600');
+        button.classList.add('bg-gray-700');
+        button.style.borderColor = '#4B5563'; // Border color of unselected buttons
+      }
+
+      // Add the bg-gray-600 class to the clicked button and adjust border color
+      selectedButton.classList.remove('bg-gray-700');
+      selectedButton.classList.add('bg-gray-600');
+      selectedButton.style.borderColor = '#1F2937'; // Border color of the selected button
+    }
+
+    // Set the default selected button (day) on page load
+    window.onload = () => {
+      const defaultButton = document.getElementById('buttonGroup').children[0];
+      selectButton(defaultButton);
+    };
+  </script>
+</body>
+</html>
