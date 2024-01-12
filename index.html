@@ -1,7 +1,8 @@
 <html>
 <head>
   <script src="https://cdn.tailwindcss.com"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfobject/2.2.12/pdfobject.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script type="module">
   import('./daily.js')
   	.then(() => console.log('module imported')); // Or the extension could be just `.js`
@@ -25,14 +26,22 @@
     <input type="checkbox" id="textsCheckbox" checked class="w-5 h-5 text-blue-600 bg-gray-700 border-gray-600 rounded focus:ring-blue-500">
   </div>
   
-  <div class="flex items-center">
+  <div class="flex items-center mb-4">
     <span class="text-white mr-4">Spacings:</span>
-    <input type="number" id="spacing" class="w-14 p-2 text-black rounded focus:outline-none" placeholder="0">
+    <input type="number" id="spacing" class="w-20 p-2 text-white bg-gray-700 rounded focus:outline-none" placeholder="10" step="0.1" value="10">
     <span class="text-white ml-2 mr-8">mm</span>
     <span class="text-white mr-4">in between:</span>
-    <input type="number" id="inBetween" class="w-14 p-2 text-black rounded focus:outline-none" placeholder="0">
+    <input type="number" id="inBetween" class="w-20 p-2 text-white bg-gray-700 rounded focus:outline-none" placeholder="9.5" step="0.1" value="9.5">
     <span class="text-white ml-2">mm</span>
   </div>
+
+  <div class="flex items-center">
+    <span class="text-white mr-4">Cell size:</span>
+    <input type="number" id="cellSize" class="w-20 p-2 text-white bg-gray-700 rounded focus:outline-none" placeholder="9.5" step="0.1" value="9.5">
+    <span class="text-white ml-2">mm</span>
+  </div>
+  
+  <div id="pdfViewer" class="mt-8"></div>
 
   <script>
     function selectButton(selectedButton) {
@@ -55,6 +64,19 @@
       const defaultButton = document.getElementById('buttonGroup').children[0];
       selectButton(defaultButton);
     };
+    
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    // Example content
+    doc.text("Hello world!", 10, 10);
+    doc.text("This is jsPDF in action.", 10, 20);
+
+    // Output as Data URL
+    const pdfDataUri = doc.output('datauristring');
+
+    // Embed the PDF using PDFObject
+    PDFObject.embed(pdfDataUri, "#pdfViewer");
   </script>
 </body>
 </html>

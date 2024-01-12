@@ -1,0 +1,122 @@
+<html>
+<head>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .container {
+      display: grid;
+      grid-template-columns: minmax(auto, 150px) 1fr;
+      gap: 20px;
+      max-width: 800px;
+      margin: auto;
+      padding: 20px;
+      background-color: #1E293B;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    label {
+      display: flex;
+      align-items: center;
+      color: #E2E8F0;
+      text-align: right;
+      margin-right: 10px;
+      width: 100%;
+    }
+
+    .input-field {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .input-field span {
+      color: #E2E8F0;
+    }
+
+    input[type="number"] {
+      width: calc(100% - 30px); /* Adjust width to fit the 'mm' label */
+      padding: 8px 12px;
+      border-radius: 6px;
+      border: 2px solid #334155;
+      background-color: #1E293B;
+      color: #E2E8F0;
+    }
+
+    input[type="checkbox"] {
+      transform: scale(1.2);
+    }
+
+    .button-group {
+      display: flex;
+      gap: 10px;
+    }
+
+    .button-group button {
+      background-color: #334155;
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .button-group button:hover {
+      background-color: #475569;
+    }
+
+    #pdfViewer {
+      grid-column: 1 / -1; /* span full width */
+      min-height: 200px;
+      border: 2px solid #334155;
+      border-radius: 6px;
+      background-color: #1E293B;
+    }
+  </style>
+</head>
+<body class="bg-gray-800 text-white font-sans">
+  <div class="container">
+    <label></label> <!-- Empty label for alignment -->
+    <div class="button-group input-field">
+      <button>day</button>
+      <button>week</button>
+      <button>month</button>
+      <button>quarter</button>
+      <button>year</button>
+    </div>
+    <label for="textsCheckbox">Texts:</label>
+    <div class="input-field">
+      <input type="checkbox" id="textsCheckbox" checked>
+    </div>
+    <label for="spacing">Spacings:</label>
+    <div class="input-field">
+      <input type="number" id="spacing" placeholder="0">
+      <span>mm</span>
+    </div>
+    <label for="inBetween">in between:</label>
+    <div class="input-field">
+      <input type="number" id="inBetween" placeholder="0">
+      <span>mm</span>
+    </div>
+    <label for="cellSize">Cell size:</label>
+    <div class="input-field">
+      <input type="number" id="cellSize" placeholder="9.5" step="0.1" value="9.5">
+      <span>mm</span>
+    </div>
+    <label></label> <!-- Empty label for alignment -->
+    <div id="pdfViewer"></div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfobject/2.2.12/pdfobject.min.js"></script>
+  <script>
+    // jsPDF and PDFObject code here...
+  </script>
+</body>
+</html>
