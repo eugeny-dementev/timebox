@@ -7,16 +7,14 @@
   <title>Timeboxing Strategy</title>
   <style>
     .hero-section {
-      background-color: #f9fafb;
+      background-image: url('https://source.unsplash.com/featured/?productivity');
+      background-size: cover;
+      background-position: center;
+      color: white;
       padding: 40px 0;
     }
 
     .section {
-      padding: 40px 0;
-    }
-
-    .download-section {
-      background-color: #f1f5f9;
       padding: 40px 0;
     }
 
@@ -26,8 +24,8 @@
       padding: 0 20px;
     }
 
-    .btn {
-      background-color: #3b82f6;
+    .btn-primary {
+      background-color: #4f46e5; /* Indigo */
       color: white;
       padding: 10px 20px;
       border-radius: 5px;
@@ -35,63 +33,68 @@
       display: inline-block;
     }
 
-    .btn:hover {
-      background-color: #2563eb;
+    .btn-primary:hover {
+      background-color: #4338ca; /* Darker Indigo */
+    }
+
+    .benefit-item, .hbr-section {
+      background-color: #e0f2fe; /* Light Blue */
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    .hbr-section {
+      background-color: #fef9c3; /* Light Yellow */
     }
   </style>
 </head>
 <body>
   <!-- Hero Section -->
   <div class="hero-section">
-    <div class="container">
-      <h1 class="text-4xl font-bold mb-4">Master Your Time with Timeboxing</h1>
-      <p class="mb-4">Discover the revolutionary approach to productivity with Timeboxing. Learn how to maximize your efficiency and reduce stress.</p>
-      <a href="#download" class="btn">Download Guides</a>
+    <div class="container text-center">
+      <h1 class="text-5xl font-bold mb-6">Master Your Time with Timeboxing</h1>
+      <p class="text-xl mb-6">Discover the revolutionary approach to productivity with Timeboxing.</p>
+      <a href="#download" class="btn-primary text-lg">Download Guides</a>
     </div>
   </div>
 
   <!-- Benefits Section -->
   <div class="section">
     <div class="container">
-      <h2 class="text-3xl font-bold mb-4">Benefits of Timeboxing</h2>
-      <ul class="list-disc list-inside mb-4">
-        <li>Increased focus and productivity</li>
-        <li>Better time management and prioritization</li>
-        <li>Reduced procrastination and distractions</li>
-        <li>Enhanced work-life balance</li>
-        <li>Clear goals and deadlines</li>
-      </ul>
-      <p>Timeboxing is not just a time management technique; it's a lifestyle change that leads to more efficient and stress-free living.</p>
+      <h2 class="text-4xl font-bold mb-6 text-center text-indigo-600">Benefits of Timeboxing</h2>
+      <div class="benefit-item">
+        <h3 class="text-lg font-semibold">Increased Focus and Productivity</h3>
+        <p>Allocate specific time slots for tasks to boost concentration and output.</p>
+      </div>
+      <!-- Additional benefits can be listed here -->
     </div>
   </div>
 
-  <!-- How to Utilize Section -->
-  <div class="section">
+  <!-- HBR Insights Section -->
+  <div class="hbr-section">
     <div class="container">
-      <h2 class="text-3xl font-bold mb-4">Utilizing Timeboxing Effectively</h2>
-      <p class="mb-4">Timeboxing can be adapted to various aspects of your life. Here are some examples:</p>
-      <ul class="list-disc list-inside mb-4">
-        <li><strong>Work:</strong> Allocate specific time slots for emails, meetings, and focused work sessions.</li>
-        <li><strong>Personal Development:</strong> Set aside time for learning new skills or hobbies.</li>
-        <li><strong>Health:</strong> Schedule regular exercise and relaxation activities.</li>
-        <li><strong>Family and Social Life:</strong> Dedicate uninterrupted time for family interactions and socializing.</li>
-      </ul>
-      <p>By segmenting your day into focused blocks, you can give your full attention to one task at a time, leading to higher quality results.</p>
+      <h2 class="text-3xl font-bold mb-4 text-indigo-600">Insights from Harvard Business Review</h2>
+      <p>Highlighted in a notable Harvard Business Review article, timeboxing has been recognized for its substantial impact on productivity and work management.</p>
+      <div class="benefit-item">
+        <h3 class="text-lg font-semibold">Strategic Task Management</h3>
+        <p>Visual and intuitive placement of tasks in your calendar for effective time management.</p>
+      </div>
+      <!-- Additional insights based on the HBR article can be listed here -->
     </div>
   </div>
 
   <!-- Download Section -->
-  <div class="download-section" id="download">
-    <div class="container">
-      <h2 class="text-3xl font-bold mb-4">Download Your Timeboxing Guides</h2>
-      <p class="mb-4">Get started with Timeboxing by downloading our comprehensive guides.</p>
-      <a href="path/to/your-timeboxing-guide.pdf" download class="btn mr-2">Timeboxing Guide</a>
-      <a href="path/to/your-advanced-timeboxing-guide.pdf" download class="btn">Advanced Strategies</a>
+  <div class="section bg-blue-100 py-20" id="download">
+    <div class="container text-center">
+      <h2 class="text-4xl font-bold mb-6">Download Your Timeboxing Guides</h2>
+      <a href="path/to/your-timeboxing-guide.pdf" download class="btn-primary mr-2">Timeboxing Guide</a>
+      <a href="path/to/your-advanced-timeboxing-guide.pdf" download class="btn-primary">Advanced Strategies</a>
     </div>
   </div>
 
   <!-- Footer -->
-  <footer class="section">
+  <footer class="section bg-gray-200 py-8">
     <div class="container text-center">
       <p>&copy; 2024 Timeboxing Planner. All rights reserved.</p>
     </div>
