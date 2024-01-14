@@ -65,9 +65,9 @@ function drawPlanningSections(x, y, w, h, cols, rows) {
   for (let j = 1; j < rows; j++) {
     doc.line(
       x,
-      tpby + cellSize + j * sectionColumnWidth,
+      tpby + cellSize + j * sectionRowHeight,
       x + w,
-      tpby + cellSize + j * sectionColumnWidth,
+      tpby + cellSize + j * sectionRowHeight,
     );
   }
 
