@@ -14,93 +14,103 @@ export function getMonthlyDoc(splitType) {
   });
   doc.setFontSize(10);
 
-  const ch = 9.25; // Cell size
+  const cellSize = 9.25; // Cell size
   const tpby = 15; // Top priorities block Y starting coordinate
 
-  /**
-   * @param cols: amount of columns to fit in x axis, 5 columns means 4 lines of dots
-   * @param rows: amount of dots to fit y axis, 2 rows means single line of dots
-   */
-  function drawDots(x, y, w, h, cols, rows) {
-    const columnWidth = w / cols;
-    const rowHeight = h / rows;
-
-    doc.setDrawColor(200, 200, 200); // grey color for dots
-
-    for (let c = 1; c < cols; c++) {
-      for (let r = 1; r < rows; r++) {
-        doc.rect(x + columnWidth * c, y + rowHeight * r, 0.2, 0.2);
-      }
-    }
-
-    doc.setDrawColor(0, 0, 0); // return black color
-  }
-
   doc.text(10, 12, "Top priorities:");
-  doc.rect(10, tpby, 59, ch * 3);
-  doc.line(10, tpby + ch, 69, tpby + ch);
-  doc.line(10, tpby + ch * 2, 69, tpby + ch * 2);
+  doc.rect(10, tpby, 59, cellSize * 3);
+  doc.line(10, tpby + cellSize, 69, tpby + cellSize);
+  doc.line(10, tpby + cellSize * 2, 69, tpby + cellSize * 2);
 
   doc.text(10, 49, "Brain dump:");
-  doc.rect(10, tpby + ch * 4, 59, ch * 16);
+  doc.rect(10, tpby + cellSize * 4, 59, cellSize * 16);
 
   // Draw dots in brain dump area
-  const bdcolumns = Math.ceil(59 / (ch / 2));
-  const bdrows = Math.ceil((ch * 16) / (ch / 2));
-  drawDots(10, tpby + ch * 4, 59, ch * 16, bdcolumns, bdrows);
+  const bdcolumns = Math.ceil(59 / (cellSize / 2));
+  const bdrows = Math.ceil((cellSize * 16) / (cellSize / 2));
+  drawDots(10, tpby + cellSize * 4, 59, cellSize * 16, bdcolumns, bdrows);
 
   doc.text(79, 12, "Month:");
   doc.line(91, 15, 138, 15);
 
   // Draw planning section
-  const planningSectionHeight = ch * 19;
-  const weekDayHeight = planningSectionHeight / 15;
-  doc.rect(79, tpby + ch, 59, planningSectionHeight); // Table rectangle
-
-  function drawPlanningSections(79, tpby + ch, 59, planningSectionHeight);
+  const planningSectionHeight = cellSize * 19;
+  drawPlanningSections(79, tpby + cellSize, 59, planningSectionHeight, 2, 2);
 
   return doc;
 }
- 
-function drawPlanningSections(x, y, w, h, columns, rows) {
-  const weeklyDayColumns = Math.ceil(59 / 2 / (ch / 2));
+
+function drawPlanningSections(x, y, w, h, cols, rows) {
+  doc.rect(x, y, w, h); // Table rectangle
+
+  const weeklyDayColumns = Math.ceil(59 / 2 / (cellSize / 2));
   const weeklyDayRows = 3;
-  const y = tpby + ch + weekDayHeight * i;
-  doc.line(79, y, 79 + 59, y);
+  doc.line(x, y, x + w, y);
 
-  const sectionColumnWidth = 59 / columns;
+  const sectionColumnWidth = w / cols;
 
-  // Draw planning section separation line 
-  for (let i = 1; i < columns; i++) {
+  // Draw planning section vertical separation lines
+  for (let i = 1; i < cols; i++) {
     doc.line(
-      79 + i * sectionColumnWidth,
-      tpby + ch,
-      79 + i * sectionColumnWidth,
-      tpby + ch + planningSectionHeight,
+      x + i * sectionColumnWidth,
+      tpby + cellSize,
+      x + i * sectionColumnWidth,
+      tpby + cellSize + planningSectionHeight,
+    );
+  }
+
+  const sectionRowHeight = h / rows;
+
+  // Draw planning section horizontal separation lines
+  for (let j = 1; j < rows; j++) {
+    doc.line(
+      x,
+      tpby + cellSize + j * sectionColumnWidth,
+      x + w,
+      tpby + cellSize + j * sectionColumnWidth,
     );
   }
 
   // Draw cells in the actions table
   for (let i = 1; i <= 15; i++) {
-    const y = tpby + ch + weekDayHeight * i;
+    const y = tpby + cellSize + weekDayHeight * i;
     doc.setDrawColor(0, 0, 0);
-    doc.line(79, y, 79 + 59, y);
+    doc.line(x, y, x + w, y);
 
     drawDots(
-      79,
+      x,
       y - weekDayHeight,
-      59 / 2,
+      w / 2,
       weekDayHeight,
       weeklyDayColumns,
       weeklyDayRows,
     );
     drawDots(
-      79 + 59 / 2,
+      x + w / 2,
       y - weekDayHeight,
-      59 / 2,
+      w / 2,
       weekDayHeight,
       weeklyDayColumns,
       weeklyDayRows,
     );
   }
-} 
+}
+
+/**
+  * @param cols: amount of columns to fit in x axis, 5 columns means 4 lines of dots
+  * @param rows: amount of dots to fit y axis, 2 rows means single line of dots
+  */
+function drawDots(x, y, w, h, cols, rows) {
+  const columnWidth = w / cols;
+  const rowHeight = h / rows;
+
+  doc.setDrawColor(200, 200, 200); // grey color for dots
+
+  for (let c = 1; c < cols; c++) {
+    for (let r = 1; r < rows; r++) {
+      doc.rect(x + columnWidth * c, y + rowHeight * r, 0.2, 0.2);
+    }
+  }
+
+  doc.setDrawColor(0, 0, 0); // return black color
+}
