@@ -1,4 +1,7 @@
-export function getMonthlyDoc() {
+/**
+ * @param splitType: day | week - how planning section should be split, by 30 days or by 4 weeks
+ */
+export function getMonthlyDoc(splitType) {
   let JSPDF = null;
   try {
     JSPDF = jsPDF;
@@ -13,26 +16,6 @@ export function getMonthlyDoc() {
 
   const ch = 9.25; // Cell size
   const tpby = 15; // Top priorities block Y starting coordinate
-  let sh = 8; // Starting hour;
-
-  let nh = sh; // Next hour;
-  function getHour() {
-    sh = nh;
-
-    if (sh == 23) {
-      nh = 0;
-    } else {
-      nh = sh + 1;
-    }
-
-    return sh;
-  }
-
-  function getHourStr(hour) {
-    if (hour == 0) return "00";
-    if (hour < 10) return `0${hour}`;
-    return `${hour}`;
-  }
 
   /**
    * @param cols: amount of columns to fit in x axis, 5 columns means 4 lines of dots
@@ -62,24 +45,40 @@ export function getMonthlyDoc() {
   doc.rect(10, tpby + ch * 4, 59, ch * 16);
 
   // Draw dots in brain dump area
-  doc.setDrawColor(200, 200, 200);
   const bdcolumns = Math.ceil(59 / (ch / 2));
   const bdrows = Math.ceil((ch * 16) / (ch / 2));
   drawDots(10, tpby + ch * 4, 59, ch * 16, bdcolumns, bdrows);
 
-  doc.setDrawColor(0, 0, 0);
-
   doc.text(79, 12, "Month:");
   doc.line(91, 15, 138, 15);
 
-  // Days of the week
-  const weekHeight = ch * 19;
-  const weekDayHeight = weekHeight / 15;
-  doc.rect(79, tpby + ch, 59, weekHeight); // Table rectangle
-  doc.line(79 + 59 / 2, tpby + ch, 79 + 59 / 2, tpby + ch + weekHeight);
+  // Draw planning section
+  const planningSectionHeight = ch * 19;
+  const weekDayHeight = planningSectionHeight / 15;
+  doc.rect(79, tpby + ch, 59, planningSectionHeight); // Table rectangle
 
+  function drawPlanningSections(79, tpby + ch, 59, planningSectionHeight);
+
+  return doc;
+}
+ 
+function drawPlanningSections(x, y, w, h, columns, rows) {
   const weeklyDayColumns = Math.ceil(59 / 2 / (ch / 2));
   const weeklyDayRows = 3;
+  const y = tpby + ch + weekDayHeight * i;
+  doc.line(79, y, 79 + 59, y);
+
+  const sectionColumnWidth = 59 / columns;
+
+  // Draw planning section separation line 
+  for (let i = 1; i < columns; i++) {
+    doc.line(
+      79 + i * sectionColumnWidth,
+      tpby + ch,
+      79 + i * sectionColumnWidth,
+      tpby + ch + planningSectionHeight,
+    );
+  }
 
   // Draw cells in the actions table
   for (let i = 1; i <= 15; i++) {
@@ -104,6 +103,4 @@ export function getMonthlyDoc() {
       weeklyDayRows,
     );
   }
-
-  return doc;
-}
+} 
