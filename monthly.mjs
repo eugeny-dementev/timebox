@@ -1,3 +1,5 @@
+const tpby = 15; // Top priorities block Y starting coordinate
+
 /**
  * @param splitType: day | week - how planning section should be split, by 30 days or by 4 weeks
  */
@@ -14,8 +16,6 @@ export function getMonthlyDoc(splitType, cellSize = 9.5) {
   });
   doc.setFontSize(10);
 
-  const tpby = 15; // Top priorities block Y starting coordinate
-
   doc.text(10, 12, "Top priorities:");
   doc.rect(10, tpby, 59, cellSize * 3);
   doc.line(10, tpby + cellSize, 69, tpby + cellSize);
@@ -27,7 +27,7 @@ export function getMonthlyDoc(splitType, cellSize = 9.5) {
   // Draw dots in brain dump area
   const bdcolumns = Math.ceil(59 / (cellSize / 2));
   const bdrows = Math.ceil((cellSize * 16) / (cellSize / 2));
-  drawDots(10, tpby + cellSize * 4, 59, cellSize * 16, bdcolumns, bdrows);
+  drawDots(doc, 10, tpby + cellSize * 4, 59, cellSize * 16, bdcolumns, bdrows);
 
   doc.text(79, 12, "Month:");
   doc.line(91, 15, 138, 15);
@@ -35,15 +35,15 @@ export function getMonthlyDoc(splitType, cellSize = 9.5) {
   // Draw planning section
   const planningSectionHeight = cellSize * 19;
   if (splitType == 'week') {
-    drawPlanningSections(79, tpby + cellSize, 59, planningSectionHeight, 2, 2, cellSize);
+    drawPlanningSections(doc, 79, tpby + cellSize, 59, planningSectionHeight, 1, 4, cellSize);
   } else if (splitType == 'day') {
-    drawPlanningSections(79, tpby + cellSize, 59, planningSectionHeight, 2, 15, cellSize);
+    drawPlanningSections(doc, 79, tpby + cellSize, 59, planningSectionHeight, 2, 15, cellSize);
   }
 
   return doc;
 }
 
-function drawPlanningSections(x, y, w, h, cols, rows, cellSize) {
+function drawPlanningSections(doc, x, y, w, h, cols, rows, cellSize) {
   doc.rect(x, y, w, h); // Table rectangle
 
   const columnWidth = w / cols;
@@ -76,6 +76,7 @@ function drawPlanningSections(x, y, w, h, cols, rows, cellSize) {
   for (let i = 0; i < cols; i++) {
     for (let j = 0; j < rows; j++) {
       drawDots(
+        doc,
         x + columnWidth * i,
         y + rowHeight * j,
         columnWidth,
@@ -91,7 +92,7 @@ function drawPlanningSections(x, y, w, h, cols, rows, cellSize) {
   * @param cols: amount of columns to fit in x axis, 5 columns means 4 lines of dots
   * @param rows: amount of dots to fit y axis, 2 rows means single line of dots
   */
-function drawDots(x, y, w, h, cols, rows) {
+function drawDots(doc, x, y, w, h, cols, rows) {
   const columnWidth = w / cols;
   const rowHeight = h / rows;
 

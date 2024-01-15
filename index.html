@@ -39,6 +39,25 @@
       <button class="text-white bg-gray-700 hover:bg-gray-600 px-4 py-2 border border-gray-700 rounded-r focus:outline-none" onclick="selectButton(this)">year</button>
       --></div>
     </div>
+    <div id="month-split-options" class="flex items-center justify-center mb-4 invisible">
+      <div class="inline-flex" id="splitButtonGroup">
+        <button
+          class="text-white bg-gray-600 hover:bg-gray-500 px-4 py-2 border border-gray-600 rounded-l focus:outline-none"
+          onclick="selectMonthlySplit(this)"
+        >
+          day
+        </button>
+        <button
+          class="text-white bg-gray-700 hover:bg-gray-600 px-4 py-2 border border-gray-700 rounded-r focus:outline-none"
+          onclick="selectMonthlySplit(this)"
+        >
+          week
+        </button>
+        <!--
+      <button class="text-white bg-gray-700 hover:bg-gray-600 px-4 py-2 border border-gray-700 focus:outline-none" onclick="selectButton(this)">quarter</button>
+      <button class="text-white bg-gray-700 hover:bg-gray-600 px-4 py-2 border border-gray-700 rounded-r focus:outline-none" onclick="selectButton(this)">year</button>
+      --></div>
+    </div>
 
     <!--
   <div class="flex items-center mb-4">
@@ -69,8 +88,12 @@
       import { getWeeklyDoc } from "./weekly.mjs";
       import { getMonthlyDoc } from "./monthly.mjs";
 
+      let selectedTimeboxRange = 'day';
+      let selectedMonthlySplit = 'week';
+
+      let cellSize = 9.5;
+
       function selectButton(selectedButton) {
-        console.log("selectedButton:", selectedButton);
         // Remove the bg-gray-600 class and adjust border color for all buttons
         let buttons = document.getElementById("buttonGroup").children;
         for (let button of buttons) {
@@ -84,12 +107,41 @@
         selectedButton.classList.add("bg-gray-600");
         selectedButton.style.borderColor = "#1F2937"; // Border color of the selected button
 
-        const selectedTimeRange = selectedButton.textContent;
+        selectedTimeboxRange = selectedButton.textContent.trim();
 
-        renderPDFDoc(selectedTimeRange);
+        if (selectedTimeboxRange == 'month') {
+          let splitOptions = document.getElementById("month-split-options");
+          splitOptions.classList.remove('invisible');
+        } else {
+          let splitOptions = document.getElementById("month-split-options");
+          splitOptions.classList.add('invisible');
+        }
+
+        renderPDFDoc(selectedTimeboxRange, cellSize, selectedMonthlySplit);
       }
 
       window.selectButton = selectButton;
+
+      function selectMonthlySplit(selectedButton) {
+        // Remove the bg-gray-600 class and adjust border color for all buttons
+        let buttons = document.getElementById("splitButtonGroup").children;
+        for (let button of buttons) {
+          button.classList.remove("bg-gray-600");
+          button.classList.add("bg-gray-700");
+          button.style.borderColor = "#4B5563"; // Border color of unselected buttons
+        }
+
+        // Add the bg-gray-600 class to the clicked button and adjust border color
+        selectedButton.classList.remove("bg-gray-700");
+        selectedButton.classList.add("bg-gray-600");
+        selectedButton.style.borderColor = "#1F2937"; // Border color of the selected button
+
+        selectedMonthlySplit = selectedButton.textContent.trim();
+
+        renderPDFDoc(selectedTimeboxRange, cellSize, selectedMonthlySplit);
+      }
+
+      window.selectMonthlySplit = selectMonthlySplit;
 
       function renderPDFDoc(timeRange) {
         let doc = null;
@@ -101,7 +153,7 @@
             doc = getWeeklyDoc();
             break;
           case "month":
-            doc = getMonthlyDoc();
+            doc = getMonthlyDoc(selectedMonthlySplit, cellSize);
             break;
           default:
             break;
@@ -116,9 +168,11 @@
 
       // Set the default selected button (day) on page load
       window.onload = () => {
-        const defaultButton =
-          document.getElementById("buttonGroup").children[0];
+        const defaultButton = document.getElementById("buttonGroup").children[0];
         selectButton(defaultButton);
+
+        const defaultSplitButton = document.getElementById("splitButtonGroup").children[1];
+        selectMonthlySplit(defaultSplitButton);
       };
     </script>
   </body>
