@@ -1,7 +1,7 @@
 /**
  * @param splitType: day | week - how planning section should be split, by 30 days or by 4 weeks
  */
-export function getMonthlyDoc(splitType) {
+export function getMonthlyDoc(splitType, cellSize = 9.5) {
   let JSPDF = null;
   try {
     JSPDF = jsPDF;
@@ -14,7 +14,6 @@ export function getMonthlyDoc(splitType) {
   });
   doc.setFontSize(10);
 
-  const cellSize = 9.25; // Cell size
   const tpby = 15; // Top priorities block Y starting coordinate
 
   doc.text(10, 12, "Top priorities:");
@@ -35,64 +34,56 @@ export function getMonthlyDoc(splitType) {
 
   // Draw planning section
   const planningSectionHeight = cellSize * 19;
-  drawPlanningSections(79, tpby + cellSize, 59, planningSectionHeight, 2, 2);
+  if (splitType == 'week') {
+    drawPlanningSections(79, tpby + cellSize, 59, planningSectionHeight, 2, 2, cellSize);
+  } else if (splitType == 'day') {
+    drawPlanningSections(79, tpby + cellSize, 59, planningSectionHeight, 2, 15, cellSize);
+  }
 
   return doc;
 }
 
-function drawPlanningSections(x, y, w, h, cols, rows) {
+function drawPlanningSections(x, y, w, h, cols, rows, cellSize) {
   doc.rect(x, y, w, h); // Table rectangle
 
-  const weeklyDayColumns = Math.ceil(59 / 2 / (cellSize / 2));
-  const weeklyDayRows = 3;
-  doc.line(x, y, x + w, y);
-
-  const sectionColumnWidth = w / cols;
+  const columnWidth = w / cols;
 
   // Draw planning section vertical separation lines
   for (let i = 1; i < cols; i++) {
     doc.line(
-      x + i * sectionColumnWidth,
+      x + i * columnWidth,
       tpby + cellSize,
-      x + i * sectionColumnWidth,
-      tpby + cellSize + planningSectionHeight,
+      x + i * columnWidth,
+      tpby + cellSize + h,
     );
   }
 
-  const sectionRowHeight = h / rows;
+  const rowHeight = h / rows;
 
   // Draw planning section horizontal separation lines
   for (let j = 1; j < rows; j++) {
     doc.line(
       x,
-      tpby + cellSize + j * sectionRowHeight,
+      tpby + cellSize + j * rowHeight,
       x + w,
-      tpby + cellSize + j * sectionRowHeight,
+      tpby + cellSize + j * rowHeight,
     );
   }
 
-  // Draw cells in the actions table
-  for (let i = 1; i <= 15; i++) {
-    const y = tpby + cellSize + weekDayHeight * i;
-    doc.setDrawColor(0, 0, 0);
-    doc.line(x, y, x + w, y);
+  const dotsColumns = Math.ceil(w / cols / (cellSize / 2));
+  const dotsRows = Math.ceil(h / rows / (cellSize / 2));
 
-    drawDots(
-      x,
-      y - weekDayHeight,
-      w / 2,
-      weekDayHeight,
-      weeklyDayColumns,
-      weeklyDayRows,
-    );
-    drawDots(
-      x + w / 2,
-      y - weekDayHeight,
-      w / 2,
-      weekDayHeight,
-      weeklyDayColumns,
-      weeklyDayRows,
-    );
+  for (let i = 0; i < cols; i++) {
+    for (let j = 0; j < rows; j++) {
+      drawDots(
+        x + columnWidth * i,
+        y + rowHeight * j,
+        columnWidth,
+        rowHeight,
+        dotsColumns,
+        dotsRows,
+      );
+    }
   }
 }
 
