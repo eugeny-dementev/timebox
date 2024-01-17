@@ -3,97 +3,115 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfobject/2.2.12/pdfobject.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script
+      type="module"
+      src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.0.379/pdf.min.mjs"
+    ></script>
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
     />
+    <style>
+      .centered-div {
+        margin-left: auto;
+        margin-right: auto;
+        width: fit-content;
+        max-width: 100%;
+      }
+    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   </head>
-  <body class="bg-gray-800 m-8">
-    <header class="flex items-center justify-center m-10">
-      <div class="relative z-10">
-        <h1 class="text-4xl font-bold text-white">Timebox Planner PDFs</h1>
+  <body class="bg-gray-800">
+    <div class="m-8">
+      <header class="flex items-center justify-center mb-6">
+        <div class="relative z-10">
+          <h1 class="text-6xl font-bold text-white">Timebox Planner PDFs</h1>
+        </div>
+      </header>
+      <div class="flex flex-col items-center justify-center mb-6">
+        <div class="inline-flex flex-wrap" id="buttonGroup">
+          <button
+            class="text-xl md:text-base bg-gray-600 hover:bg-gray-500 px-6 md:px-4 py-3 md:py-2 border border-gray-600 rounded-l focus:outline-none"
+            onclick="selectButton(this)"
+          >
+            day
+          </button>
+          <button
+            class="text-xl md:text-base bg-gray-700 hover:bg-gray-600 px-6 md:px-4 py-3 md:py-2 border-t border-b border-gray-700 focus:outline-none"
+            onclick="selectButton(this)"
+          >
+            week
+          </button>
+          <button
+            class="text-xl md:text-base bg-gray-700 hover:bg-gray-600 px-6 md:px-4 py-3 md:py-2 border border-gray-700 rounded-r focus:outline-none"
+            onclick="selectButton(this)"
+          >
+            month
+          </button>
+        </div>
       </div>
-    </header>
-    <div class="flex items-center justify-center mb-4">
-      <div class="inline-flex" id="buttonGroup">
-        <button
-          class="text-white bg-gray-600 hover:bg-gray-500 px-4 py-2 border border-gray-600 rounded-l focus:outline-none"
-          onclick="selectButton(this)"
-        >
-          day
-        </button>
-        <button
-          class="text-white bg-gray-700 hover:bg-gray-600 px-4 py-2 border border-gray-700 focus:outline-none"
-          onclick="selectButton(this)"
-        >
-          week
-        </button>
-        <button
-          class="text-white bg-gray-700 hover:bg-gray-600 px-4 py-2 border border-gray-700 rounded-r focus:outline-none"
-          onclick="selectButton(this)"
-        >
-          month
-        </button>
-        <!--
-      <button class="text-white bg-gray-700 hover:bg-gray-600 px-4 py-2 border border-gray-700 focus:outline-none" onclick="selectButton(this)">quarter</button>
-      <button class="text-white bg-gray-700 hover:bg-gray-600 px-4 py-2 border border-gray-700 rounded-r focus:outline-none" onclick="selectButton(this)">year</button>
-      --></div>
-    </div>
-    <div id="month-split-options" class="flex items-center justify-center mb-4 invisible">
-      <div class="inline-flex" id="splitButtonGroup">
-        <button
-          class="text-white bg-gray-600 hover:bg-gray-500 px-4 py-2 border border-gray-600 rounded-l focus:outline-none"
-          onclick="selectMonthlySplit(this)"
-        >
-          day
-        </button>
-        <button
-          class="text-white bg-gray-700 hover:bg-gray-600 px-4 py-2 border border-gray-700 rounded-r focus:outline-none"
-          onclick="selectMonthlySplit(this)"
-        >
-          week
-        </button>
-        <!--
-      <button class="text-white bg-gray-700 hover:bg-gray-600 px-4 py-2 border border-gray-700 focus:outline-none" onclick="selectButton(this)">quarter</button>
-      <button class="text-white bg-gray-700 hover:bg-gray-600 px-4 py-2 border border-gray-700 rounded-r focus:outline-none" onclick="selectButton(this)">year</button>
-      --></div>
+      <div
+        id="month-split-options"
+        class="flex flex-col items-center justify-center mb-6 invisible"
+      >
+        <div class="inline-flex flex-wrap" id="splitButtonGroup">
+          <button
+            class="text-xl md:text-base bg-gray-600 hover:bg-gray-500 px-6 md:px-4 py-3 md:py-2 border border-gray-600 rounded-l focus:outline-none"
+            onclick="selectMonthlySplit(this)"
+          >
+            day
+          </button>
+          <button
+            class="text-xl md:text-base bg-gray-700 hover:bg-gray-600 px-6 md:px-4 py-3 md:py-2 border border-gray-700 rounded-r focus:outline-none"
+            onclick="selectMonthlySplit(this)"
+          >
+            week
+          </button>
+        </div>
+      </div>
+      <div class="flex flex-col items-center justify-center mb-6">
+        <div class="inline-flex flex-wrap">
+          <button
+            class="text-xl md:text-base bg-gray-600 hover:bg-gray-500 px-6 md:px-4 py-3 md:py-2 border border-gray-600 rounded-l focus:outline-none"
+            onclick="downloadPdf()"
+          >
+            download
+          </button>
+        </div>
+      </div>
     </div>
 
-    <!--
-  <div class="flex items-center mb-4">
-    <span class="text-white mr-4">Texts:</span>
-    <input type="checkbox" id="textsCheckbox" checked class="w-5 h-5 text-blue-600 bg-gray-700 border-gray-600 rounded focus:ring-blue-500">
-  </div>
-  
-  <div class="flex items-center mb-4">
-    <span class="text-white mr-4">Spacings:</span>
-    <input type="number" id="spacing" class="w-20 p-2 text-white bg-gray-700 rounded focus:outline-none" placeholder="10" step="0.1" value="10">
-    <span class="text-white ml-2 mr-8">mm</span>
-    <span class="text-white mr-4">in between:</span>
-    <input type="number" id="inBetween" class="w-20 p-2 text-white bg-gray-700 rounded focus:outline-none" placeholder="9.5" step="0.1" value="9.5">
-    <span class="text-white ml-2">mm</span>
-  </div>
+    <div class="flex items-center">
+      <span class="text-white mr-4">Cell size:</span>
+      <input
+        type="number"
+        id="cellSize"
+        class="w-20 p-2 text-white bg-gray-700 rounded focus:outline-none"
+        placeholder="9.5"
+        step="0.1"
+        value="9.5"
+      />
+      <span class="text-white ml-2">mm</span>
+    </div>
 
-  <div class="flex items-center">
-    <span class="text-white mr-4">Cell size:</span>
-    <input type="number" id="cellSize" class="w-20 p-2 text-white bg-gray-700 rounded focus:outline-none" placeholder="9.5" step="0.1" value="9.5">
-    <span class="text-white ml-2">mm</span>
-  </div>
--->
-
-    <div id="pdfViewer" class="mt-8"></div>
+    <div id="pdfViewer" class="m-0 centered-div"></div>
 
     <script type="module">
       import { getDailyDoc } from "./daily.mjs";
       import { getWeeklyDoc } from "./weekly.mjs";
       import { getMonthlyDoc } from "./monthly.mjs";
 
-      let selectedTimeboxRange = 'day';
-      let selectedMonthlySplit = 'week';
+      let selectedTimeboxRange = "day";
+      let selectedMonthlySplit = "week";
+
+      let doc = null;
+      let docName = null;
 
       let cellSize = 9.5;
 
       function selectButton(selectedButton) {
+        doc = null;
+        docName = null;
         // Remove the bg-gray-600 class and adjust border color for all buttons
         let buttons = document.getElementById("buttonGroup").children;
         for (let button of buttons) {
@@ -109,18 +127,24 @@
 
         selectedTimeboxRange = selectedButton.textContent.trim();
 
-        if (selectedTimeboxRange == 'month') {
+        if (selectedTimeboxRange == "month") {
           let splitOptions = document.getElementById("month-split-options");
-          splitOptions.classList.remove('invisible');
+          splitOptions.classList.remove("invisible");
         } else {
           let splitOptions = document.getElementById("month-split-options");
-          splitOptions.classList.add('invisible');
+          splitOptions.classList.add("invisible");
         }
 
         renderPDFDoc(selectedTimeboxRange, cellSize, selectedMonthlySplit);
       }
 
       window.selectButton = selectButton;
+
+      function downloadPdf() {
+        doc.save(docName);
+      }
+
+      window.downloadPdf = downloadPdf;
 
       function selectMonthlySplit(selectedButton) {
         // Remove the bg-gray-600 class and adjust border color for all buttons
@@ -143,8 +167,8 @@
 
       window.selectMonthlySplit = selectMonthlySplit;
 
-      function renderPDFDoc(timeRange) {
-        let doc = null;
+      async function renderPDFDoc(timeRange) {
+        docName = `${timeRange}.timbox.planner.pdf`;
         switch (timeRange) {
           case "day":
             doc = getDailyDoc();
@@ -162,18 +186,61 @@
         // Output as Data URL
         const pdfDataUri = doc.output("datauristring");
 
-        // Embed the PDF using PDFObject
-        PDFObject.embed(pdfDataUri, "#pdfViewer");
+        if (isMobileDevice()) {
+          // PDF.js for mobile devices
+          const { pdfjsLib } = globalThis;
+          pdfjsLib.GlobalWorkerOptions.workerSrc =
+            "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.0.379/pdf.worker.min.mjs";
+
+          const loadingTask = pdfjsLib.getDocument({
+            data: atob(pdfDataUri.split(",")[1]),
+          });
+          try {
+            const pdf = await loadingTask.promise;
+            const canvasContainer = document.getElementById("pdfViewer");
+
+            for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+              const page = await pdf.getPage(pageNum);
+              const viewport = page.getViewport({ scale: 1.0 });
+              const canvas = document.createElement("canvas");
+              const context = canvas.getContext("2d");
+              canvas.height = viewport.height;
+              canvas.width = viewport.width;
+
+              canvasContainer.innerHTML = "";
+              canvasContainer.appendChild(canvas);
+
+              const renderContext = {
+                canvasContext: context,
+                viewport: viewport,
+              };
+              await page.render(renderContext).promise;
+            }
+          } catch (reason) {
+            console.error(reason);
+          }
+        } else {
+          // PDFObject for desktop browsers
+          PDFObject.embed(pdfDataUri, "#pdfViewer");
+        }
       }
 
       // Set the default selected button (day) on page load
       window.onload = () => {
-        const defaultButton = document.getElementById("buttonGroup").children[0];
+        const defaultButton =
+          document.getElementById("buttonGroup").children[0];
         selectButton(defaultButton);
 
-        const defaultSplitButton = document.getElementById("splitButtonGroup").children[1];
+        const defaultSplitButton =
+          document.getElementById("splitButtonGroup").children[1];
         selectMonthlySplit(defaultSplitButton);
       };
+
+      function isMobileDevice() {
+        return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+          navigator.userAgent,
+        );
+      }
     </script>
   </body>
 </html>
