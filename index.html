@@ -1,25 +1,18 @@
 <html>
   <head>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfobject/2.2.12/pdfobject.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script
       type="module"
       src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.0.379/pdf.min.mjs"
     ></script>
+
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
     />
-    <style>
-      .centered-div {
-        margin-left: auto;
-        margin-right: auto;
-        width: fit-content;
-        max-width: 100%;
-      }
-    </style>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   </head>
   <body class="bg-gray-800">
     <div class="m-8">
@@ -81,12 +74,18 @@
       </div>
     </div>
 
-    <div id="pdfViewer" class="m-0 centered-div"></div>
+    <div id="pdfViewer" class="flex justify-center items-center"></div>
 
     <script type="module">
       import { getDailyDoc } from "./daily.mjs";
       import { getWeeklyDoc } from "./weekly.mjs";
       import { getMonthlyDoc } from "./monthly.mjs";
+
+      const getDoc = {
+        day: getDailyDoc,
+        week: getWeeklyDoc,
+        month: getMonthlyDoc,
+      };
 
       let selectedTimeboxRange = "day";
       let selectedMonthlySplit = "week";
@@ -95,6 +94,7 @@
       let docName = null;
 
       let cellSize = 9.5;
+      let startingHour = 8;
 
       function selectButton(selectedButton) {
         doc = null;
@@ -154,80 +154,65 @@
 
       window.selectMonthlySplit = selectMonthlySplit;
 
-      async function renderPDFDoc(timeRange) {
+      async function renderPDFDoc(timeRange, cellSize, monthlySplit) {
         docName = `${timeRange}.timbox.planner.pdf`;
-        switch (timeRange) {
-          case "day":
-            doc = getDailyDoc();
-            break;
-          case "week":
-            doc = getWeeklyDoc();
-            break;
-          case "month":
-            doc = getMonthlyDoc(selectedMonthlySplit, cellSize);
-            break;
-          default:
-            break;
+
+        try {
+          doc = getDoc[timeRange]({
+            cellSize,
+            startingHour,
+            monthlySplit,
+          });
+        } catch (reason) {
+          console.error(reason);
         }
 
-        // Output as Data URL
+        const { pdfjsLib } = globalThis;
+        pdfjsLib.GlobalWorkerOptions.workerSrc =
+          "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.0.379/pdf.worker.min.mjs";
+
         const pdfDataUri = doc.output("datauristring");
+        const loadingTask = pdfjsLib.getDocument({
+          data: atob(pdfDataUri.split(",")[1]),
+        });
 
-        if (isMobileDevice()) {
-          // PDF.js for mobile devices
-          const { pdfjsLib } = globalThis;
-          pdfjsLib.GlobalWorkerOptions.workerSrc =
-            "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.0.379/pdf.worker.min.mjs";
+        try {
+          const pdf = await loadingTask.promise;
+          const canvasContainer = document.getElementById("pdfViewer");
 
-          const loadingTask = pdfjsLib.getDocument({
-            data: atob(pdfDataUri.split(",")[1]),
-          });
-          try {
-            const pdf = await loadingTask.promise;
-            const canvasContainer = document.getElementById("pdfViewer");
+          for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+            const page = await pdf.getPage(pageNum);
+            const viewport = page.getViewport({ scale: 1.0 });
+            const canvas = document.createElement("canvas");
+            const context = canvas.getContext("2d");
+            canvas.height = viewport.height;
+            canvas.width = viewport.width;
 
-            for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
-              const page = await pdf.getPage(pageNum);
-              const viewport = page.getViewport({ scale: 1.0 });
-              const canvas = document.createElement("canvas");
-              const context = canvas.getContext("2d");
-              canvas.height = viewport.height;
-              canvas.width = viewport.width;
+            canvasContainer.innerHTML = "";
+            canvasContainer.appendChild(canvas);
 
-              canvasContainer.innerHTML = "";
-              canvasContainer.appendChild(canvas);
-
-              const renderContext = {
-                canvasContext: context,
-                viewport: viewport,
-              };
-              await page.render(renderContext).promise;
-            }
-          } catch (reason) {
-            console.error(reason);
+            const renderContext = {
+              canvasContext: context,
+              viewport: viewport,
+            };
+            await page.render(renderContext).promise;
           }
-        } else {
-          // PDFObject for desktop browsers
-          PDFObject.embed(pdfDataUri, "#pdfViewer");
+        } catch (reason) {
+          console.error(reason);
         }
       }
 
-      // Set the default selected button (day) on page load
       window.onload = () => {
+        // Set the default selected button (day) on page load
         const defaultButton =
           document.getElementById("buttonGroup").children[0];
         selectButton(defaultButton);
 
+        // Set the default selected month separation (week) on page load
         const defaultSplitButton =
           document.getElementById("splitButtonGroup").children[1];
         selectMonthlySplit(defaultSplitButton);
       };
-
-      function isMobileDevice() {
-        return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-          navigator.userAgent,
-        );
-      }
     </script>
   </body>
 </html>
