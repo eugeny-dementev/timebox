@@ -94,6 +94,7 @@
       let docName = null;
 
       let cellSize = 9.5;
+      let startingHour = 8;
 
       function selectButton(selectedButton) {
         doc = null;
@@ -153,11 +154,15 @@
 
       window.selectMonthlySplit = selectMonthlySplit;
 
-      async function renderPDFDoc(timeRange) {
+      async function renderPDFDoc(timeRange, cellSize, monthlySplit) {
         docName = `${timeRange}.timbox.planner.pdf`;
 
         try {
-          doc = getDoc[timeRange]();
+          doc = getDoc[timeRange]({
+            cellSize,
+            startingHour,
+            monthlySplit,
+          });
         } catch (reason) {
           console.error(reason);
         }
