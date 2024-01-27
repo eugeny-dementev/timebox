@@ -1,0 +1,318 @@
+<html>
+  <head>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script
+      type="module"
+      src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.0.379/pdf.min.mjs"
+    ></script>
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+    />
+  </head>
+  <body class="bg-gray-800 text-white">
+    <nav class="bg-gray-900 shadow">
+      <div class="max-w-6xl mx-auto px-4">
+        <div class="flex justify-between">
+          <div class="flex space-x-7">
+            <!-- Logo -->
+            <div>
+              <a href="index.html" class="flex items-center py-4 px-2">
+                <span class="font-semibold text-gray-500 text-lg"
+                  >Timebox Planner</span
+                >
+              </a>
+            </div>
+            <!-- Primary Navbar items -->
+            <div class="hidden md:flex items-center space-x-1">
+              <!-- <div class="md:flex items-center space-x-1"> -->
+              <a
+                href="index.html"
+                class="py-4 px-2 text-gray-300 font-semibold hover:text-green-400 transition duration-300"
+                >About</a
+              >
+              <!-- <a -->
+              <!--   href="download.html" -->
+              <!--   class="py-4 px-2 text-gray-300 font-semibold hover:text-green-400 transition duration-300" -->
+              <!--   >Download</a -->
+              <!-- > -->
+            <!--   <a -->
+            <!--     href="generate.html" -->
+            <!--     class="py-4 px-2 text-gray-300 font-semibold hover:text-green-400 transition duration-300" -->
+            <!--     >Generate</a -->
+            <!--   > -->
+            </div>
+          </div>
+          <!-- Secondary Navbar items -->
+          <div class="hidden md:flex items-center space-x-3">
+            <a
+              href="generate.html"
+              class="py-2 px-2 font-medium text-white bg-green-500 rounded hover:bg-green-400 transition duration-300"
+              >Generate</a
+            >
+          </div>
+          <!-- Mobile menu button -->
+          <div class="md:hidden flex items-center">
+            <button class="outline-none mobile-menu-button">
+              <svg
+                class="w-6 h-6 text-gray-300 hover:text-green-400"
+                x-show="!showMenu"
+                fill="none"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path d="M4 6h16M4 12h16M4 18h16"></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+      <!-- Mobile menu -->
+      <div class="hidden mobile-menu">
+        <ul class="">
+          <li>
+            <a
+              href="index.html"
+              class="block text-sm px-2 py-4 text-gray-300 hover:bg-green-500 transition duration-300"
+              >Home</a
+            >
+          </li>
+          <!-- <li> -->
+          <!--   <a -->
+          <!--     href="download.html" -->
+          <!--     class="block text-sm px-2 py-4 text-gray-300 hover:bg-green-500 transition duration-300" -->
+          <!--     >Download</a -->
+          <!--   > -->
+          <!-- </li> -->
+          <!-- <li> -->
+          <!--   <a -->
+          <!--     href="generate.html" -->
+          <!--     class="block text-sm px-2 py-4 text-gray-300 hover:bg-green-500 transition duration-300" -->
+          <!--     >Generate</a -->
+          <!--   > -->
+          <!-- </li> -->
+          <li>
+            <a
+              href="generate.html"
+              class="block text-sm px-2 py-4 text-gray-300 hover:bg-green-500 bg-gray-700"
+              >Generate</a
+            >
+          </li>
+        </ul>
+      </div>
+    </nav>
+    <div class="m-8">
+      <header class="flex items-center justify-center mb-6">
+        <div class="relative z-10">
+          <h1 class="text-6xl font-bold text-white">Timebox Planner PDFs</h1>
+        </div>
+      </header>
+      <div class="flex flex-col items-center justify-center mb-6">
+        <div class="inline-flex flex-wrap" id="buttonGroup">
+          <button
+            class="text-xl md:text-base bg-gray-600 hover:bg-gray-500 px-6 md:px-4 py-3 md:py-2 border border-gray-600 rounded-l focus:outline-none"
+            onclick="selectButton(this)"
+          >
+            day
+          </button>
+          <button
+            class="text-xl md:text-base bg-gray-700 hover:bg-gray-600 px-6 md:px-4 py-3 md:py-2 border-t border-b border-gray-700 focus:outline-none"
+            onclick="selectButton(this)"
+          >
+            week
+          </button>
+          <button
+            class="text-xl md:text-base bg-gray-700 hover:bg-gray-600 px-6 md:px-4 py-3 md:py-2 border border-gray-700 rounded-r focus:outline-none"
+            onclick="selectButton(this)"
+          >
+            month
+          </button>
+        </div>
+      </div>
+      <div
+        id="month-split-options"
+        class="flex flex-col items-center justify-center mb-6 invisible"
+      >
+        <div class="inline-flex flex-wrap" id="splitButtonGroup">
+          <button
+            class="text-xl md:text-base bg-gray-600 hover:bg-gray-500 px-6 md:px-4 py-3 md:py-2 border border-gray-600 rounded-l focus:outline-none"
+            onclick="selectMonthlySplit(this)"
+          >
+            day
+          </button>
+          <button
+            class="text-xl md:text-base bg-gray-700 hover:bg-gray-600 px-6 md:px-4 py-3 md:py-2 border border-gray-700 rounded-r focus:outline-none"
+            onclick="selectMonthlySplit(this)"
+          >
+            week
+          </button>
+        </div>
+      </div>
+      <div class="flex flex-col items-center justify-center mb-6">
+        <div class="inline-flex flex-wrap">
+          <button
+            class="text-xl md:text-base bg-gray-600 hover:bg-gray-500 px-6 md:px-4 py-3 md:py-2 border border-gray-600 rounded-l focus:outline-none"
+            onclick="downloadPdf()"
+          >
+            download
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div id="pdfViewer" class="flex justify-center items-center"></div>
+
+    <script type="module">
+      import { getDailyDoc } from "./daily.mjs";
+      import { getWeeklyDoc } from "./weekly.mjs";
+      import { getMonthlyDoc } from "./monthly.mjs";
+
+      const getDoc = {
+        day: getDailyDoc,
+        week: getWeeklyDoc,
+        month: getMonthlyDoc,
+      };
+
+      let selectedTimeboxRange = "day";
+      let selectedMonthlySplit = "week";
+
+      let doc = null;
+      let docName = null;
+
+      let cellSize = 9.5;
+      let startingHour = 8;
+
+      function selectButton(selectedButton) {
+        doc = null;
+        docName = null;
+        // Remove the bg-gray-600 class and adjust border color for all buttons
+        let buttons = document.getElementById("buttonGroup").children;
+        for (let button of buttons) {
+          button.classList.remove("bg-gray-600");
+          button.classList.add("bg-gray-700");
+          button.style.borderColor = "#4B5563"; // Border color of unselected buttons
+        }
+
+        // Add the bg-gray-600 class to the clicked button and adjust border color
+        selectedButton.classList.remove("bg-gray-700");
+        selectedButton.classList.add("bg-gray-600");
+        selectedButton.style.borderColor = "#1F2937"; // Border color of the selected button
+
+        selectedTimeboxRange = selectedButton.textContent.trim();
+
+        if (selectedTimeboxRange == "month") {
+          let splitOptions = document.getElementById("month-split-options");
+          splitOptions.classList.remove("invisible");
+        } else {
+          let splitOptions = document.getElementById("month-split-options");
+          splitOptions.classList.add("invisible");
+        }
+
+        renderPDFDoc(selectedTimeboxRange, cellSize, selectedMonthlySplit);
+      }
+
+      window.selectButton = selectButton;
+
+      function downloadPdf() {
+        doc.save(docName);
+      }
+
+      window.downloadPdf = downloadPdf;
+
+      function selectMonthlySplit(selectedButton) {
+        // Remove the bg-gray-600 class and adjust border color for all buttons
+        let buttons = document.getElementById("splitButtonGroup").children;
+        for (let button of buttons) {
+          button.classList.remove("bg-gray-600");
+          button.classList.add("bg-gray-700");
+          button.style.borderColor = "#4B5563"; // Border color of unselected buttons
+        }
+
+        // Add the bg-gray-600 class to the clicked button and adjust border color
+        selectedButton.classList.remove("bg-gray-700");
+        selectedButton.classList.add("bg-gray-600");
+        selectedButton.style.borderColor = "#1F2937"; // Border color of the selected button
+
+        selectedMonthlySplit = selectedButton.textContent.trim();
+
+        renderPDFDoc(selectedTimeboxRange, cellSize, selectedMonthlySplit);
+      }
+
+      window.selectMonthlySplit = selectMonthlySplit;
+
+      async function renderPDFDoc(timeRange, cellSize, monthlySplit) {
+        docName = `${timeRange}.timbox.planner.pdf`;
+
+        try {
+          doc = getDoc[timeRange]({
+            cellSize,
+            startingHour,
+            monthlySplit,
+          });
+        } catch (reason) {
+          console.error(reason);
+        }
+
+        const { pdfjsLib } = globalThis;
+        pdfjsLib.GlobalWorkerOptions.workerSrc =
+          "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.0.379/pdf.worker.min.mjs";
+
+        const pdfDataUri = doc.output("datauristring");
+        const loadingTask = pdfjsLib.getDocument({
+          data: atob(pdfDataUri.split(",")[1]),
+        });
+
+        try {
+          const pdf = await loadingTask.promise;
+          const canvasContainer = document.getElementById("pdfViewer");
+
+          for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+            const page = await pdf.getPage(pageNum);
+            const viewport = page.getViewport({ scale: 1.0 });
+            const canvas = document.createElement("canvas");
+            const context = canvas.getContext("2d");
+            canvas.height = viewport.height;
+            canvas.width = viewport.width;
+
+            canvasContainer.innerHTML = "";
+            canvasContainer.appendChild(canvas);
+
+            const renderContext = {
+              canvasContext: context,
+              viewport: viewport,
+            };
+            await page.render(renderContext).promise;
+          }
+        } catch (reason) {
+          console.error(reason);
+        }
+      }
+
+      window.onload = () => {
+        // Set the default selected button (day) on page load
+        const defaultButton =
+          document.getElementById("buttonGroup").children[0];
+        selectButton(defaultButton);
+
+        // Set the default selected month separation (week) on page load
+        const defaultSplitButton =
+          document.getElementById("splitButtonGroup").children[1];
+        selectMonthlySplit(defaultSplitButton);
+
+        const btn = document.querySelector("button.mobile-menu-button");
+        const menu = document.querySelector(".mobile-menu");
+
+        btn.addEventListener("click", () => {
+            menu.classList.toggle("hidden");
+        });
+      };
+    </script>
+  </body>
+</html>
