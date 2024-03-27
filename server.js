@@ -19,8 +19,8 @@ export async function createServer() {
     }),
   );
 
-  app.use('*', async (_req, res) => {
-    const url = '/';
+  app.get('*', async (req, res) => {
+    const url = req.url
 
     const template = fs.readFileSync(resolve('dist/client/index.html'), 'utf-8');
     const render = (await import('./dist/server/entry-server.js')).default;
