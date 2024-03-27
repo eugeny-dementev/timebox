@@ -7,7 +7,7 @@
     "build": "npm run build:client && npm run build:server",
     "build:client": "vite build --outDir dist/client",
     "build:server": "vite build --ssr src/entry-server.tsx --outDir dist/server",
-    "serve": "cross-env NODE_ENV=development node server"
+    "serve": "cross-env NODE_ENV=dev node server"
   },
   "repository": "git@github.com:eugeny-dementev/timebox.git",
   "author": "Eugeny Dementev <eugeny.dementev@ya.ru>",
