@@ -5,8 +5,10 @@ import App from './App.tsx';
 
 export default function SSRender(url: string | Partial<Location>) {
   return ReactDOMServer.renderToString(
-    <StaticRouter location={url}>
-      <App />
-    </StaticRouter>
+    <React.StrictMode>
+      <StaticRouter location={url}>
+        <App />
+      </StaticRouter>
+    </React.StrictMode>
   );
 }
