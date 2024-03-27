@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "build": "npm run build:client && npm run build:server",
+    "watch:server": "vite build --ssr src/entry-server.tsx --watch --outDir dist/server",
     "build:client": "vite build --outDir dist/client",
     "build:server": "vite build --ssr src/entry-server.tsx --outDir dist/server",
     "generate": "vite build --outDir dist/static && npm run build:server && node prerender",
