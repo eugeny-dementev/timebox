@@ -1,0 +1,9 @@
+{
+  "name": "timebox",
+  "version": "1.0.0",
+  "description": "SSG/SSR for timebox github pages",
+  "main": "index.js",
+  "repository": "git@github.com:eugeny-dementev/timebox.git",
+  "author": "Eugeny Dementev <eugeny.dementev@ya.ru>",
+  "license": "MIT"
+}
