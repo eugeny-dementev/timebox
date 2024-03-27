@@ -5,7 +5,9 @@ import App from './App.tsx';
 
 ReactDOM.hydrateRoot(
   document.getElementById('app'),
-  <BrowserRouter>
-    <App />
-  </BrowserRouter>
+  <React.StrictMode>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </React.StrictMode>
 );
