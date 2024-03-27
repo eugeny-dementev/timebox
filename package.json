@@ -2,7 +2,13 @@
   "name": "timebox",
   "version": "1.0.0",
   "description": "SSG/SSR for timebox github pages",
-  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "build": "npm run build:client && npm run build:server",
+    "build:client": "vite build --outDir dist/client",
+    "build:server": "vite build --ssr src/entry-server.tsx --outDir dist/server",
+    "serve": "cross-env NODE_ENV=production node server"
+  },
   "repository": "git@github.com:eugeny-dementev/timebox.git",
   "author": "Eugeny Dementev <eugeny.dementev@ya.ru>",
   "license": "MIT",
