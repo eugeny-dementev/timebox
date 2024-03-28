@@ -1,38 +1,61 @@
-import React from 'react';
-import { Link, Route, Routes } from 'react-router-dom'
+import React, { Ref, useRef } from 'react';
+import { Route, Routes } from 'react-router-dom';
 
-import Home from './pages/Home.tsx';
+import DesktopNav from './DesktopNav.tsx';
+import { RouteType } from './navTypes.ts';
 import About from './pages/About.tsx';
+import Generate from './pages/Generate.tsx';
+import Howto from './pages/Howto.tsx';
+import MobileNav from './MobileNav.tsx';
+import MobileMenuButton from './MobileMenuButton.tsx';
 
-const routes = [
-  {
-    name: 'Home',
-    path: '/',
-    component: Home,
-  },
+const routes: RouteType[] = [
   {
     name: 'About',
-    path: '/about',
+    path: '/',
     component: About,
+  },
+  {
+    name: 'Howto',
+    path: '/howto',
+    component: Howto,
   },
 ];
 
+const generateRoute: RouteType = {
+  name: 'Generate',
+  path: '/generate',
+  component: Generate,
+};
+
 export default function App() {
+  const mobileMenuRef: Ref<HTMLDivElement> = useRef(null);
+
   return (
     <>
-      <nav>
-        <ul>
-          {routes.map(({ name, path }) => {
-            return (
-              <li key={path}>
-                <Link to={path}>{name}</Link>
-              </li>
-            );
-          })}
-        </ul>
-      </nav>
+      <nav className="bg-gray-900 shadow">
+        <div className="max-w-6xl mx-auto px-4">
+          <div className="flex justify-between">
+            <DesktopNav routes={routes} />
+
+            <MobileMenuButton onClick={() => {
+              mobileMenuRef.current?.classList.toggle('hidden');
+            }} />
+
+          </div>
+        </div>
+        <MobileNav
+          mmref={mobileMenuRef}
+          hideMenu={() => {
+            mobileMenuRef.current?.classList.add('hidden');
+          }}
+          routes={routes.concat(generateRoute)} />
+      </nav >
       <Routes>
-        {routes.map(({ path, component: PageComp }) => <Route key={path} path={path} element={<PageComp />} />)}
+        {routes
+          .concat(generateRoute)
+          .map(({ path, component: PageComp }) =>
+            <Route key={path} path={path} element={<PageComp />} />)}
       </Routes>
     </>
   );
