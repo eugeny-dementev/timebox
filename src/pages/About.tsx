@@ -1,38 +1,24 @@
-import React, { CSSProperties } from 'react';
-import css from 'style-to-object';
+import React from 'react';
+import Attractor from './Attractor';
+import Header from './Header';
+import Descriptor from './Descriptor';
+import Center from './Center';
+import { Link } from 'react-router-dom';
 
 export default function About() {
   return (
     <main>
-      <div
-        className="relative pt-16 pb-32 flex content-center items-center justify-center"
-        style={css("min-height: 75vh") as CSSProperties}
-      >
-        <div
-          className="absolute top-0 w-full h-full bg-center bg-cover"
-          style={css("background-image: url(timebox-fight.png);") as CSSProperties}
-        >
-          <span
-            id="blackOverlay"
-            className="w-full h-full absolute opacity-75 bg-black"
-          ></span>
-        </div>
-        <div className="container relative mx-auto">
-          <div className="items-center flex flex-wrap">
-            <div className="w-full lg:w-6/12 px-4 ml-auto mr-auto text-center">
-              <h1 className="text-white font-semibold text-5xl">
-                Timebox: A Symphony of Productivity and Joy
-              </h1>
-              <p className="mt-4 text-lg text-blueGray-200">
-                Timeboxing shines as a beacon of modern time management. It
-                transforms the way we plan our day, week, and month, turning
-                them into a canvas of organized blocks, each representing a
-                specific task or activity
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
+      <Attractor pic='timebox-fight.png'>
+        <Header>
+          Timebox: A Symphony of Productivity and Joy
+        </Header>
+        <Descriptor>
+          Timeboxing shines as a beacon of modern time management. It
+          transforms the way we plan our day, week, and month, turning
+          them into a canvas of organized blocks, each representing a
+          specific task or activity
+        </Descriptor>
+      </Attractor>
       <section className="py-12 px-6">
         <div className="max-w-4xl mx-auto space-y-8">
           <p className="text-lg leading-relaxed">
@@ -143,36 +129,16 @@ export default function About() {
         </div>
       </section>
 
-      <div
-        className="relative pt-16 pb-32 flex content-center items-center justify-center"
-        style={css("min-height: 75vh") as CSSProperties}
-      >
-        <div
-          className="absolute top-0 w-full h-full bg-center bg-cover"
-          style={css("background-image: url(timebox-win.png);") as CSSProperties}
-        >
-          <span
-            id="blackOverlay"
-            className="w-full h-full absolute opacity-75 bg-black"
-          ></span>
-        </div>
-        <div className="container relative mx-auto">
-          <div className="items-center flex flex-wrap">
-            <div className="w-full lg:w-6/12 px-4 ml-auto mr-auto text-center">
-              <h1 className="text-white font-semibold text-5xl">
-                Timebox: A Symphony of Productivity and Joy
-              </h1>
-              <div className="flex justify-center mt-8">
-                <a
-                  href="howto.html"
-                  className="py-2 px-2 font-big text-white bg-green-500 rounded hover:bg-green-400"
-                >Learn how to timebox</a
-                >
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <Attractor pic='timebox-win.png'>
+        <Header>
+          Timebox: A Symphony of Productivity and Joy
+        </Header>
+        <Center>
+          <Link to="/howto" className="py-2 px-2 font-big text-white bg-green-500 rounded hover:bg-green-400">
+            Learn how to timebox
+          </Link>
+        </Center>
+      </Attractor>
     </main>
   );
 }
