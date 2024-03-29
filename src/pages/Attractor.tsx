@@ -8,10 +8,7 @@ type Props = {
 
 export default function Attractor({ pic, children }: Props) {
   return (
-    <div
-      className="relative pt-16 pb-32 flex content-center items-center justify-center"
-      style={css("min-height: 75vh") as CSSProperties}
-    >
+    <div className="relative pt-16 pb-32 flex content-center items-center justify-center min-h-screen">
       <div
         className="absolute top-0 w-full h-full bg-center bg-cover"
         style={css(`background-image: url(${pic});`) as CSSProperties}
