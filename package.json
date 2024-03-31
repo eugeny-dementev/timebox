@@ -5,6 +5,10 @@
   "type": "module",
   "scripts": {
     "build": "npm run build:client && npm run build:server",
+    "copy:static": "cp -r ./dist/static ./out",
+    "copy:generator": "cp ./old_generate.html ./out",
+    "copy:assets": "cp ./*.{png,jpg,mjs} ./out",
+    "copy": "npm run copy:static && npm run copy:generator && npm run copy:assets",
     "watch:server": "vite build --ssr src/entry-server.tsx --watch --outDir dist/server",
     "build:client": "vite build --outDir dist/client",
     "build:server": "vite build --ssr src/entry-server.tsx --outDir dist/server",
