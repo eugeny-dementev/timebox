@@ -11,13 +11,13 @@ export default function DesktopNav({ routes }: NavProps) {
             Timebox Planner
           </span>
         </Link>
+            <div className="hidden md:flex items-center space-x-1">
         {routes.map(({ name, path }) =>
-          <Link key={path} to={path} className="flex items-center py-4 px-2">
-            <span className="font-semibold text-gray-500 text-lg">
-              {name}
-            </span>
+          <Link key={path} to={path} className="py-4 px-2 text-gray-300 font-semibold hover:text-green-400 transition duration-300">
+            {name}
           </Link>
         )}
+        </div>
       </div>
       <div className="hidden md:flex items-center space-x-3">
         <Link key="/generate" to="/generate" className="py-2 px-2 font-medium text-white bg-green-500 rounded hover:bg-green-400 transition duration-300">
