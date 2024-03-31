@@ -12,7 +12,7 @@
     "copy:assets:mjs": "cp ./*.mjs ./out",
     "copy:assets:ico": "cp ./*.ico ./out",
     "copy:assets": "npm run copy:assets:png && npm run copy:assets:jpg && npm run copy:assets:mjs && npm run copy:assets:ico",
-    "fix:assets:path": "sed -i '' 's|/assets/|/timebox/assets/|g' ./out/*.html",
+    "fix:assets:path": "sed -i '' -e 's|/assets/|/timebox/assets/|g' ./out/*.html",
     "copy": "npm run copy:static && npm run copy:generator && npm run copy:assets",
     "watch:server": "vite build --ssr src/entry-server.tsx --watch --outDir dist/server",
     "build:client": "vite build --outDir dist/client",
