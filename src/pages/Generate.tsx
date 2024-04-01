@@ -6,7 +6,7 @@ export default function Generate() {
     <div>
       <iframe
         style={css('display: block; position: absolute; width: 100%; height: 100%; border: none; overflow: hidden;') as CSSProperties}
-        src='/old_generate.html'
+        src='old_generate.html'
         sandbox="allow-scripts allow-same-origin allow-downloads"
         frameBorder={0}
         marginHeight={0}

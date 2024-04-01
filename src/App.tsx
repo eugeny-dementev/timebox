@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, Navigate } from 'react-router-dom';
 
 import { RouteType } from './navTypes.ts';
 import About from './pages/About.tsx';
@@ -10,7 +10,7 @@ import Nav from './Nav.tsx';
 const routes: RouteType[] = [
   {
     name: 'About',
-    path: '/',
+    path: '/about',
     component: About,
   },
   {
@@ -35,6 +35,7 @@ export default function App() {
           .concat(generateRoute)
           .map(({ path, component: PageComp }) =>
             <Route key={path} path={path} element={<PageComp />} />)}
+        <Route path='*' element={<Navigate to="/about" replace />} />
       </Routes>
     </>
   );
