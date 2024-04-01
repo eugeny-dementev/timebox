@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "build": "npm run build:client && npm run build:server",
-    "copy:static": "mkdir -p ./out/timebox && cp -r ./dist/static/ ./out/timebox",
+    "copy:static": "mkdir -p ./out/timebox && cp -r ./dist/static/* ./out/timebox",
     "copy:generator": "cp ./old_generate.html ./out/timebox",
     "copy:assets:png": "cp ./*.png ./out/timebox",
     "copy:assets:jpg": "cp ./*.jpg ./out/timebox",
