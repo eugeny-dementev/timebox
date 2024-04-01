@@ -1,8 +1,8 @@
 import React from 'react';
-import Attractor from './Attractor';
-import Header from './Header';
-import Descriptor from './Descriptor';
-import Center from './Center';
+import Attractor from '../Attractor';
+import Header from '../Header';
+import Descriptor from '../Descriptor';
+import Center from '../Center';
 import { Link } from 'react-router-dom';
 
 export default function Howto() {
