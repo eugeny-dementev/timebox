@@ -6,7 +6,7 @@ export default function DesktopNav({ routes }: NavProps) {
   return (
     <>
       <div className="flex space-x-7">
-        <Link key="logo" to="/" className="flex items-center py-4 px-2">
+        <Link key="logo" to="/about" className="flex items-center py-4 px-2">
           <span className="font-semibold text-gray-500 text-lg">
             Timebox Planner
           </span>
