@@ -35,7 +35,7 @@ export default function App() {
           .concat(generateRoute)
           .map(({ path, component: PageComp }) =>
             <Route key={path} path={path} element={<PageComp />} />)}
-        <Route path='*' element={<Navigate to="/about" replace />} />
+        <Route key='*' path='*' element={<Navigate to="/about" replace />} />
       </Routes>
     </>
   );
