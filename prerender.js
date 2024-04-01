@@ -12,6 +12,7 @@ const template = fs.readFileSync(toAbsolute('dist/static/index.html'), 'utf-8');
   const routesToPrerender = fs
     .readdirSync(toAbsolute('src/pages'))
     .map((file) => file.replace(/\.tsx$/, '').toLowerCase())
+    .map((path) => path === 'about' ? 'index' : path)
 
   const render = (await import('./dist/server/entry-server.js')).default;
   // pre-render each route...
@@ -21,12 +22,7 @@ const template = fs.readFileSync(toAbsolute('dist/static/index.html'), 'utf-8');
 
     const html = template.replace(`<!--app-html-->`, appHtml);
 
-    const filePath = path.resolve('dist', 'static', `${url}.html`);
+    const filePath = path.resolve('dist', 'static', `${url === '/' ? 'index' : url}.html`);
     fs.writeFileSync(toAbsolute(filePath), html);
-
-    if (url == 'about') {
-      const filePath = path.resolve('dist', 'static', `index.html`);
-      fs.writeFileSync(toAbsolute(filePath), html);
-    }
   }
 })();

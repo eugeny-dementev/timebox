@@ -10,7 +10,7 @@ import Nav from './Nav.tsx';
 const routes: RouteType[] = [
   {
     name: 'About',
-    path: '/about',
+    path: '/index',
     component: About,
   },
   {
@@ -31,11 +31,11 @@ export default function App() {
     <>
       <Nav mainRoutes={routes} extraRoute={generateRoute} />
       <Routes>
+        <Route key='/' path='/' element={<Navigate to="/index" replace />} />
         {routes
           .concat(generateRoute)
           .map(({ path, component: PageComp }) =>
             <Route key={path} path={path} element={<PageComp />} />)}
-        <Route key='/' path='/' element={<Navigate to="/about" replace />} />
       </Routes>
     </>
   );
