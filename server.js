@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'url';
 import express from 'express';
+import { basename } from './options.js';
 
 console.log('metaUrl:', import.meta.url);
 
@@ -13,14 +14,22 @@ export async function createServer() {
 
   let vite = null;
 
-  app.use(
+  app.use(basename,
     (await import('serve-static')).default(resolve('dist/client'), {
       index: false,
     }),
   );
 
-  app.get('*', async (req, res) => {
+  app.use(basename,
+    (await import('serve-static')).default(resolve('./'), {
+      index: false,
+    }),
+  );
+
+  app.get(basename + '/*', async (req, res) => {
     const url = req.url
+
+    console.log('url', url);
 
     const template = fs.readFileSync(resolve('dist/client/index.html'), 'utf-8');
     const render = (await import('./dist/server/entry-server.js')).default;
