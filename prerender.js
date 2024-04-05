@@ -12,12 +12,12 @@ const template = fs.readFileSync(toAbsolute('dist/static/index.html'), 'utf-8');
   const routesToPrerender = fs
     .readdirSync(toAbsolute('src/pages'))
     .map((file) => file.replace(/\.tsx$/, '').toLowerCase())
-    .map((path) => path === 'about' ? 'index' : path)
+    .map((path) => path === 'about' ? '/' : path)
 
   const render = (await import('./dist/server/entry-server.js')).default;
   // pre-render each route...
   for (const url of routesToPrerender) {
-    const fullUrl = path.resolve('/', basename, url);
+    const fullUrl = path.join('/', basename, url);
     const appHtml = render(fullUrl);
 
     const html = template.replace(`<!--app-html-->`, appHtml);
