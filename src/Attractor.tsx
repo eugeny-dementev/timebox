@@ -14,7 +14,7 @@ export default function Attractor({ pic, children }: Props) {
     <div className="relative pt-16 pb-32 flex content-center items-center justify-center min-h-screen">
       <div
         className="absolute top-0 w-full h-full bg-center bg-cover"
-        style={css(`background-image: url(${picPath});`) as CSSProperties}
+        style={css(`backgroundImage: url(${picPath});`) as CSSProperties}
       >
         <span
           id="blackOverlay"
