@@ -23,7 +23,7 @@ export function getDailyDoc({
   const bdY = tpBottomY + cellSize - approximateLabelH;
   const bdH = endY - tpBottomY;
   drawBrainDump(doc, startX, bdY, sectionW, bdH);
-  drawDots(doc, startX, bdY + approximateLabelH, sectionW, bdH - cellSize, cellSize);
+  drawDots(doc, startX, bdY + approximateLabelH, sectionW, bdH, cellSize);
 
   const pSectionX = startX + sectionW + cellSize;
   doc.text(pSectionX - sectionW - cellSize, startY, "Date:");
