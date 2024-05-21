@@ -44,6 +44,25 @@
         </div>
       </div>
       <div
+        id="dayily-version-options"
+        class="flex flex-col items-center justify-center mb-6 invisible"
+      >
+        <div class="inline-flex flex-wrap" id="versionButtonGroup">
+          <button
+            class="text-xl md:text-base bg-gray-600 hover:bg-gray-500 px-6 md:px-4 py-3 md:py-2 border border-gray-600 rounded-l focus:outline-none"
+            onclick="selectDailyVersion(this)"
+          >
+            v1
+          </button>
+          <button
+            class="text-xl md:text-base bg-gray-700 hover:bg-gray-600 px-6 md:px-4 py-3 md:py-2 border border-gray-700 rounded-r focus:outline-none"
+            onclick="selectDailyVersion(this)"
+          >
+            v2
+          </button>
+        </div>
+      </div>
+      <div
         id="month-split-options"
         class="flex flex-col items-center justify-center mb-6 invisible"
       >
@@ -89,6 +108,7 @@
 
       let selectedTimeboxRange = "day";
       let selectedMonthlySplit = "week";
+      let selectedDayilyVersion = "v1";
 
       let doc = null;
       let docName = null;
@@ -122,7 +142,15 @@
           splitOptions.classList.add("invisible");
         }
 
-        renderPDFDoc(selectedTimeboxRange, cellSize, selectedMonthlySplit);
+        if (selectedTimeboxRange == "day") {
+          let splitOptions = document.getElementById("dayily-version-options");
+          splitOptions.classList.remove("invisible");
+        } else {
+          let splitOptions = document.getElementById("dayily-version-options");
+          splitOptions.classList.add("invisible");
+        }
+
+        renderPDFDoc(selectedTimeboxRange, cellSize, selectedMonthlySplit, selectedDayilyVersion);
       }
 
       window.selectButton = selectButton;
@@ -132,6 +160,29 @@
       }
 
       window.downloadPdf = downloadPdf;
+
+      function selectDailyVersion(selectedButton) {
+        // Remove the bg-gray-600 class and adjust border color for all buttons
+        let buttons = document.getElementById("versionButtonGroup").children;
+        for (let button of buttons) {
+          button.classList.remove("bg-gray-600");
+          button.classList.add("bg-gray-700");
+          button.style.borderColor = "#4B5563"; // Border color of unselected buttons
+        }
+
+        // Add the bg-gray-600 class to the clicked button and adjust border color
+        selectedButton.classList.remove("bg-gray-700");
+        selectedButton.classList.add("bg-gray-600");
+        selectedButton.style.borderColor = "#1F2937"; // Border color of the selected button
+
+        selectedDayilyVersion = selectedButton.textContent.trim();
+
+        console.log('selectedDayilyVersion', selectedDayilyVersion);
+
+        renderPDFDoc(selectedTimeboxRange, cellSize, selectedMonthlySplit, selectedDayilyVersion);
+      }
+
+      window.selectDailyVersion = selectDailyVersion;
 
       function selectMonthlySplit(selectedButton) {
         // Remove the bg-gray-600 class and adjust border color for all buttons
@@ -149,18 +200,19 @@
 
         selectedMonthlySplit = selectedButton.textContent.trim();
 
-        renderPDFDoc(selectedTimeboxRange, cellSize, selectedMonthlySplit);
+        renderPDFDoc(selectedTimeboxRange, cellSize, selectedMonthlySplit, selectedDayilyVersion);
       }
 
       window.selectMonthlySplit = selectMonthlySplit;
 
-      async function renderPDFDoc(timeRange, cellSize, monthlySplit) {
+      async function renderPDFDoc(timeRange, cellSize, monthlySplit, dailyVersion) {
         docName = `${timeRange}.timbox.planner.pdf`;
 
+        console.log('Selected daily version:', dailyVersion);
         try {
           doc = getDoc[timeRange]({
             cellSize,
-            version: 2,
+            version: dailyVersion == 'v2' ? 2 : 1,
             startingHour,
             monthlySplit,
           });
@@ -219,6 +271,10 @@
         const defaultSplitButton =
           document.getElementById("splitButtonGroup").children[1];
         selectMonthlySplit(defaultSplitButton);
+
+        const defaultVersionButton =
+          document.getElementById("versionButtonGroup").children[0]
+        selectDailyVersion(defaultVersionButton);
       };
     </script>
   </body>
