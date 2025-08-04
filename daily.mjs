@@ -13,6 +13,9 @@ export function getDailyDoc({
   if (version === 1) {
     return getDailyDocThicc({ cellSize, startingHour });
   }
+  if (version === 3) {
+    return getDailyOnlyDoc({ cellSize, startingHour });
+  }
 
   const doc = prepareDoc();
 
@@ -32,6 +35,26 @@ export function getDailyDoc({
   const pSectionY = pLabelY + cellSize;
   const pSectionH = endY - pSectionY + cellSize;
 
+  // Draw daily planning section with 30 minutes split for 19 hours of the day starting with 08:00
+  drawDailyPlanner2(doc, pSectionX, pLabelY - 5, sectionW, pSectionH + cellSize + 5, 9, 17);
+
+  return doc;
+}
+
+export function getDailyOnlyDoc({
+  cellSize = 9.5,
+  startingHour = 8,
+  version = 1,
+}) {
+  const doc = prepareDoc();
+
+  const pSectionX = startX + sectionW + cellSize;
+  const pLabelY = startY + approximateLabelH;
+  const pSectionY = pLabelY + cellSize;
+  const pSectionH = endY - pSectionY + cellSize;
+
+  // Draw daily planning section with 30 minutes split for 19 hours of the day starting with 08:00
+  drawDailyPlanner2(doc, startY, pLabelY - 5, sectionW, pSectionH + cellSize + 5, 9, 17);
   // Draw daily planning section with 30 minutes split for 19 hours of the day starting with 08:00
   drawDailyPlanner2(doc, pSectionX, pLabelY - 5, sectionW, pSectionH + cellSize + 5, 9, 17);
 
