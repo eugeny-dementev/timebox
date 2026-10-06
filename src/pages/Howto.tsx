@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 export default function Howto() {
   return (
     <main>
-      <Attractor pic='timebox-planning.jpg'>
+      <Attractor pic='timebox-planning-v2.jpg'>
         <Header>
           Timebox: How to use it to control your time
         </Header>
@@ -82,7 +82,7 @@ export default function Howto() {
         </div>
       </section>
 
-      <Attractor pic='timebox-pdfs.jpg'>
+      <Attractor pic='timebox-pdfs-v2.jpg'>
         <Header>
           Timebox: A Symphony of Productivity and Joy
         </Header>

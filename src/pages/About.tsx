@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 export default function About() {
   return (
     <main>
-      <Attractor pic='timebox-fight.png'>
+      <Attractor pic='timebox-fight-v2.jpg'>
         <Header>
           Timebox: A Symphony of Productivity and Joy
         </Header>
@@ -129,7 +129,7 @@ export default function About() {
         </div>
       </section>
 
-      <Attractor pic='timebox-win.png'>
+      <Attractor pic='timebox-win-v2.jpg'>
         <Header>
           Timebox: A Symphony of Productivity and Joy
         </Header>
