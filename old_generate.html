@@ -182,7 +182,32 @@
       window.selectButton = selectButton;
 
       function downloadPdf() {
-        if (doc) doc.save(docName);
+        if (!doc) return;
+        doc.save(docName);
+
+        // Reuse the parent tracker to keep one visitor session and page view.
+        // Analytics is optional: a blocked tracker must not affect downloads.
+        try {
+          const eventData = {
+            range: selectedTimeboxRange,
+            layout: selectedPageLayout,
+            filename: docName,
+          };
+          if (selectedTimeboxRange === "day") {
+            eventData.version = selectedDayilyVersion;
+          } else if (selectedTimeboxRange === "month") {
+            eventData.split = selectedMonthlySplit;
+          }
+          const parent = window.parent;
+          parent.umami?.track(properties => ({
+            ...properties,
+            url: parent.location.href,
+            name: "pdf_download",
+            data: eventData,
+          }))?.catch(() => {});
+        } catch {
+          // Ignore unavailable analytics, including cross-origin embedding.
+        }
       }
 
       window.downloadPdf = downloadPdf;
