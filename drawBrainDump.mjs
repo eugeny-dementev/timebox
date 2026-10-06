@@ -10,5 +10,5 @@
 export function drawBrainDump(doc, x, y, w, h) {
   doc.text(x, y, "Brain dump:");
   const bdSectionY = y + 3;
-  doc.rect(x, bdSectionY, w, h);
+  doc.rect(x, bdSectionY, w, h, "S");
 }

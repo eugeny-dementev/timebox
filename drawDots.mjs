@@ -24,8 +24,7 @@ export function drawDots(doc, x, y, w, h, cellSize) {
         y + rowHeight * r,
         0.2,
         0.2,
-        // 'F' as fifth parameter in "rect" method means fill rectangle inner space
-        // but with 0.2 mm size it's small enough for it to be unnecesary.
+        "S",
       );
     }
   }

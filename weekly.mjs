@@ -1,16 +1,18 @@
 import { drawBrainDump } from "./drawBrainDump.mjs";
 import { drawDots } from "./drawDots.mjs";
 import { drawTopSection } from "./drawTopSection.mjs";
-import { prepareDoc } from "./jspdf.factory.mjs";
+import { preparePlannerDoc } from "./jspdf.factory.mjs";
 import { startX, startY, endY, endX, sectionW, approximateLabelH } from "./constants.mjs";
 import { drawPlanner } from "./drawPlanner.mjs";
 
 export function getWeeklyDoc({
   cellSize = 9.5,
+  pageLayout = "a5-single",
 }) {
-  const doc = prepareDoc();
+  return preparePlannerDoc(doc => drawWeeklyDoc(doc, { cellSize }), pageLayout);
+}
 
-
+function drawWeeklyDoc(doc, { cellSize }) {
   // Top priorities
   const tpBottomY = drawTopSection(doc, startX, startY, sectionW, cellSize)
 
@@ -26,11 +28,9 @@ export function getWeeklyDoc({
   doc.text(pSectionX, startY, "Week:");
   const pLabelY = startY + approximateLabelH;
   const pLabelX = pSectionX + 10.5;
-  doc.line(pLabelX, pLabelY, endX, pLabelY);
+  doc.line(pLabelX, pLabelY, endX, pLabelY, "S");
   const pSectionY = pLabelY + cellSize;
   const pSectionH = endY - pSectionY + cellSize;
 
   drawPlanner(doc, pSectionX, pSectionY, sectionW, pSectionH, 1, 7, cellSize);
-
-  return doc;
 }

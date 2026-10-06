@@ -1,4 +1,4 @@
-import { prepareDoc } from "./jspdf.factory.mjs";
+import { preparePlannerDoc } from "./jspdf.factory.mjs";
 import { startX, startY, sectionW, endY, endX, approximateLabelH } from "./constants.mjs";
 import { drawDots } from "./drawDots.mjs";
 import { drawTopSection } from "./drawTopSection.mjs";
@@ -12,10 +12,12 @@ import { drawPlanner } from "./drawPlanner.mjs";
 export function getMonthlyDoc({
   cellSize = 9.5,
   monthlySplit,
+  pageLayout = "a5-single",
 }) {
-  const doc = prepareDoc();
+  return preparePlannerDoc(doc => drawMonthlyDoc(doc, { cellSize, monthlySplit }), pageLayout);
+}
 
-
+function drawMonthlyDoc(doc, { cellSize, monthlySplit }) {
   // Top priorities
   const tpBottomY = drawTopSection(doc, startX, startY, sectionW, cellSize)
 
@@ -32,7 +34,7 @@ export function getMonthlyDoc({
   doc.text(pSectionX, startY, "Month:");
   const pLabelY = startY + approximateLabelH;
   const pLabelX = pSectionX + 12.5;
-  doc.line(pLabelX, pLabelY, endX, pLabelY);
+  doc.line(pLabelX, pLabelY, endX, pLabelY, "S");
   const pSectionY = pLabelY + cellSize;
   const pSectionH = endY - pSectionY + cellSize;
 
@@ -41,6 +43,4 @@ export function getMonthlyDoc({
   } else if (monthlySplit == 'day') {
     drawPlanner(doc, pSectionX, pSectionY, sectionW, pSectionH, 2, 15, cellSize);
   }
-
-  return doc;
 }

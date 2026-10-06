@@ -21,6 +21,20 @@
           <h1 class="text-6xl font-bold text-white">Timebox Planner PDFs</h1>
         </div>
       </header>
+      <div class="flex flex-col items-center justify-center gap-2 mb-6">
+        <label for="pageLayout">Paper layout</label>
+        <select
+          id="pageLayout"
+          class="bg-gray-700 text-white border border-gray-600 rounded px-4 py-2"
+          onchange="selectPageLayout(this)"
+        >
+          <option value="a5-single">A5 · 1 planner</option>
+          <option value="a4-double">A4 · 2 planners</option>
+        </select>
+        <p id="printHint" class="hidden text-sm text-gray-300 text-center">
+          Two rotated A5 planners. Print portrait at 100% / Actual size.
+        </p>
+      </div>
       <div class="flex flex-col items-center justify-center mb-6">
         <div class="inline-flex flex-wrap" id="buttonGroup">
           <button
@@ -92,6 +106,8 @@
           <button
             class="text-xl md:text-base bg-gray-600 hover:bg-gray-500 px-6 md:px-4 py-3 md:py-2 border border-gray-600 rounded-l focus:outline-none"
             onclick="downloadPdf()"
+            id="downloadButton"
+            disabled
           >
             download
           </button>
@@ -99,7 +115,8 @@
       </div>
     </div>
 
-    <div id="pdfViewer" class="flex justify-center items-center"></div>
+    <p id="pdfError" role="alert" class="hidden text-center text-red-300 mx-4 mb-4"></p>
+    <div id="pdfViewer" class="flex justify-center items-center px-4 pb-6" aria-busy="true"></div>
 
     <script type="module">
       import { getDailyDoc } from "./daily.mjs";
@@ -115,18 +132,18 @@
       let selectedTimeboxRange = "day";
       let selectedMonthlySplit = "week";
       let selectedDayilyVersion = "v1";
+      let selectedPageLayout = "a5-single";
 
       let doc = null;
       let docName = null;
+      let previewRevision = 0;
 
       let cellSize = 9.5;
       let startingHour = 8;
 
-      function selectButton(selectedButton) {
-        doc = null;
-        docName = null;
+      function highlightButton(selectedButton, groupId) {
         // Remove the bg-gray-600 class and adjust border color for all buttons
-        let buttons = document.getElementById("buttonGroup").children;
+        let buttons = document.getElementById(groupId).children;
         for (let button of buttons) {
           button.classList.remove("bg-gray-600");
           button.classList.add("bg-gray-700");
@@ -137,7 +154,10 @@
         selectedButton.classList.remove("bg-gray-700");
         selectedButton.classList.add("bg-gray-600");
         selectedButton.style.borderColor = "#1F2937"; // Border color of the selected button
+      }
 
+      function selectButton(selectedButton) {
+        highlightButton(selectedButton, "buttonGroup");
         selectedTimeboxRange = selectedButton.textContent.trim();
 
         if (selectedTimeboxRange == "month") {
@@ -156,121 +176,118 @@
           splitOptions.classList.add("invisible");
         }
 
-        renderPDFDoc(selectedTimeboxRange, cellSize, selectedMonthlySplit, selectedDayilyVersion);
+        renderPDFDoc();
       }
 
       window.selectButton = selectButton;
 
       function downloadPdf() {
-        doc.save(docName);
+        if (doc) doc.save(docName);
       }
 
       window.downloadPdf = downloadPdf;
 
       function selectDailyVersion(selectedButton) {
-        // Remove the bg-gray-600 class and adjust border color for all buttons
-        let buttons = document.getElementById("versionButtonGroup").children;
-        for (let button of buttons) {
-          button.classList.remove("bg-gray-600");
-          button.classList.add("bg-gray-700");
-          button.style.borderColor = "#4B5563"; // Border color of unselected buttons
-        }
-
-        // Add the bg-gray-600 class to the clicked button and adjust border color
-        selectedButton.classList.remove("bg-gray-700");
-        selectedButton.classList.add("bg-gray-600");
-        selectedButton.style.borderColor = "#1F2937"; // Border color of the selected button
-
+        highlightButton(selectedButton, "versionButtonGroup");
         selectedDayilyVersion = selectedButton.textContent.trim();
-
-        console.log('selectedDayilyVersion', selectedDayilyVersion);
-
-        renderPDFDoc(selectedTimeboxRange, cellSize, selectedMonthlySplit, selectedDayilyVersion);
+        renderPDFDoc();
       }
 
       window.selectDailyVersion = selectDailyVersion;
 
       function selectMonthlySplit(selectedButton) {
-        // Remove the bg-gray-600 class and adjust border color for all buttons
-        let buttons = document.getElementById("splitButtonGroup").children;
-        for (let button of buttons) {
-          button.classList.remove("bg-gray-600");
-          button.classList.add("bg-gray-700");
-          button.style.borderColor = "#4B5563"; // Border color of unselected buttons
-        }
-
-        // Add the bg-gray-600 class to the clicked button and adjust border color
-        selectedButton.classList.remove("bg-gray-700");
-        selectedButton.classList.add("bg-gray-600");
-        selectedButton.style.borderColor = "#1F2937"; // Border color of the selected button
-
+        highlightButton(selectedButton, "splitButtonGroup");
         selectedMonthlySplit = selectedButton.textContent.trim();
-
-        renderPDFDoc(selectedTimeboxRange, cellSize, selectedMonthlySplit, selectedDayilyVersion);
+        renderPDFDoc();
       }
 
       window.selectMonthlySplit = selectMonthlySplit;
 
-      async function renderPDFDoc(timeRange, cellSize, monthlySplit, dailyVersion) {
-        docName = `${timeRange}.timbox.planner.pdf`;
+      function selectPageLayout(select) {
+        selectedPageLayout = select.value;
+        document.getElementById("printHint").classList.toggle("hidden", selectedPageLayout !== "a4-double");
+        renderPDFDoc();
+      }
+
+      window.selectPageLayout = selectPageLayout;
+
+      async function renderPDFDoc() {
+        const revision = ++previewRevision;
+        const canvasContainer = document.getElementById("pdfViewer");
+        const downloadButton = document.getElementById("downloadButton");
+        const errorMessage = document.getElementById("pdfError");
+        doc = null;
+        docName = null;
+        downloadButton.disabled = true;
+        canvasContainer.setAttribute("aria-busy", "true");
+        errorMessage.classList.add("hidden");
+        const layoutSuffix = selectedPageLayout === "a4-double" ? ".a4-two" : "";
+        const nextDocName = `${selectedTimeboxRange}.timbox.planner${layoutSuffix}.pdf`;
 
         let chosenDailyVersion = 1;
-        if (dailyVersion === 'v2') {
+        if (selectedDayilyVersion === 'v2') {
           chosenDailyVersion = 2
-        } else if (dailyVersion === 'v3') {
+        } else if (selectedDayilyVersion === 'v3') {
           chosenDailyVersion = 3
         }
 
-        console.log('Selected daily version:', dailyVersion);
+        let loadingTask;
         try {
-          doc = getDoc[timeRange]({
+          const nextDoc = getDoc[selectedTimeboxRange]({
             cellSize,
             version: chosenDailyVersion,
             startingHour,
-            monthlySplit,
+            monthlySplit: selectedMonthlySplit,
+            pageLayout: selectedPageLayout,
           });
-        } catch (reason) {
-          console.error(reason);
-        }
 
-        const { pdfjsLib } = globalThis;
-        pdfjsLib.GlobalWorkerOptions.workerSrc =
-          "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.0.379/pdf.worker.min.mjs";
+          const { pdfjsLib } = globalThis;
+          pdfjsLib.GlobalWorkerOptions.workerSrc =
+            "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.0.379/pdf.worker.min.mjs";
 
-        const pdfDataUri = doc.output("datauristring");
-        const loadingTask = pdfjsLib.getDocument({
-          data: atob(pdfDataUri.split(",")[1]),
-        });
+          loadingTask = pdfjsLib.getDocument({
+            data: new Uint8Array(nextDoc.output("arraybuffer")),
+          });
 
-        function isMobileDevice() {
-          return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-        }
-
-        const scale = isMobileDevice() ? 1.0 : 2.0;
-
-        try {
-          const pdf = await loadingTask.promise;
-          const canvasContainer = document.getElementById("pdfViewer");
-
-          for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
-            const page = await pdf.getPage(pageNum);
-            const viewport = page.getViewport({ scale });
-            const canvas = document.createElement("canvas");
-            const context = canvas.getContext("2d");
-            canvas.height = viewport.height;
-            canvas.width = viewport.width;
-
-            canvasContainer.innerHTML = "";
-            canvasContainer.appendChild(canvas);
-
-            const renderContext = {
-              canvasContext: context,
-              viewport: viewport,
-            };
-            await page.render(renderContext).promise;
+          function isMobileDevice() {
+            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
           }
+
+          const scale = isMobileDevice() ? 1.0 : 2.0;
+
+          const pdf = await loadingTask.promise;
+          if (revision !== previewRevision) return;
+
+          const page = await pdf.getPage(1);
+          const viewport = page.getViewport({ scale });
+          const canvas = document.createElement("canvas");
+          const context = canvas.getContext("2d");
+          canvas.height = viewport.height;
+          canvas.width = viewport.width;
+
+          canvas.className = "max-w-full h-auto block";
+
+          const renderContext = {
+            canvasContext: context,
+            viewport: viewport,
+          };
+          await page.render(renderContext).promise;
+          if (revision !== previewRevision) return;
+
+          // Commit the preview and download together only for the latest selection.
+          canvasContainer.replaceChildren(canvas);
+          doc = nextDoc;
+          docName = nextDocName;
+          downloadButton.disabled = false;
         } catch (reason) {
+          if (revision !== previewRevision) return;
           console.error(reason);
+          canvasContainer.replaceChildren();
+          errorMessage.textContent = "Could not prepare the PDF. Choose a layout to try again.";
+          errorMessage.classList.remove("hidden");
+        } finally {
+          if (revision === previewRevision) canvasContainer.setAttribute("aria-busy", "false");
+          if (loadingTask) await loadingTask.destroy();
         }
       }
 
@@ -278,16 +295,16 @@
         // Set the default selected button (day) on page load
         const defaultButton =
           document.getElementById("buttonGroup").children[0];
-        selectButton(defaultButton);
 
         // Set the default selected month separation (week) on page load
         const defaultSplitButton =
           document.getElementById("splitButtonGroup").children[1];
-        selectMonthlySplit(defaultSplitButton);
+        highlightButton(defaultSplitButton, "splitButtonGroup");
 
         const defaultVersionButton =
           document.getElementById("versionButtonGroup").children[0]
-        selectDailyVersion(defaultVersionButton);
+        highlightButton(defaultVersionButton, "versionButtonGroup");
+        selectButton(defaultButton);
       };
     </script>
   </body>

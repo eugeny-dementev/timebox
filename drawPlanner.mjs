@@ -1,7 +1,7 @@
 import { drawDots } from "./drawDots.mjs";
 
 export function drawPlanner(doc, x, y, w, h, cols, rows, cellSize) {
-  doc.rect(x, y, w, h); // Table rectangle
+  doc.rect(x, y, w, h, "S"); // Table rectangle
 
   const columnWidth = w / cols;
 
@@ -12,6 +12,7 @@ export function drawPlanner(doc, x, y, w, h, cols, rows, cellSize) {
       y,
       x + i * columnWidth,
       y + h,
+      "S",
     );
   }
 
@@ -24,6 +25,7 @@ export function drawPlanner(doc, x, y, w, h, cols, rows, cellSize) {
       y + j * rowHeight,
       x + w,
       y + j * rowHeight,
+      "S",
     );
   }
 

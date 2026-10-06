@@ -1,4 +1,4 @@
-import { prepareDoc } from "./jspdf.factory.mjs";
+import { preparePlannerDoc } from "./jspdf.factory.mjs";
 import { drawTopSection } from "./drawTopSection.mjs";
 import { drawBrainDump } from "./drawBrainDump.mjs";
 import { drawDots } from "./drawDots.mjs";
@@ -9,16 +9,19 @@ export function getDailyDoc({
   cellSize = 9.5,
   startingHour = 8,
   version = 1,
+  pageLayout = "a5-single",
 }) {
   if (version === 1) {
-    return getDailyDocThicc({ cellSize, startingHour });
+    return preparePlannerDoc(doc => drawDailyDocThicc(doc, { cellSize, startingHour }), pageLayout);
   }
   if (version === 3) {
-    return getDailyOnlyDoc({ cellSize, startingHour });
+    return getDailyOnlyDoc({ cellSize, startingHour, pageLayout });
   }
 
-  const doc = prepareDoc();
+  return preparePlannerDoc(doc => drawDailyDoc(doc, { cellSize, startingHour }), pageLayout);
+}
 
+function drawDailyDoc(doc, { cellSize, startingHour }) {
   // Top priorities
   const tpBottomY = drawTopSection(doc, startX, startY + cellSize, sectionW, cellSize)
 
@@ -31,23 +34,24 @@ export function getDailyDoc({
   const pSectionX = startX + sectionW + cellSize;
   doc.text(pSectionX - sectionW - cellSize, startY, "Date:");
   const pLabelY = startY + approximateLabelH;
-  doc.line(startX + 10.5, pLabelY, startX + sectionW, pLabelY);
+  doc.line(startX + 10.5, pLabelY, startX + sectionW, pLabelY, "S");
   const pSectionY = pLabelY + cellSize;
   const pSectionH = endY - pSectionY + cellSize;
 
   // Draw daily planning section with 30 minutes split for 19 hours of the day starting with 08:00
   drawDailyPlanner2(doc, pSectionX, pLabelY - 5, sectionW, pSectionH + cellSize + 5, 9, 17);
-
-  return doc;
 }
 
 export function getDailyOnlyDoc({
   cellSize = 9.5,
   startingHour = 8,
   version = 1,
+  pageLayout = "a5-single",
 }) {
-  const doc = prepareDoc();
+  return preparePlannerDoc(doc => drawDailyOnlyDoc(doc, { cellSize, startingHour }), pageLayout);
+}
 
+function drawDailyOnlyDoc(doc, { cellSize, startingHour }) {
   const pSectionX = startX + sectionW + cellSize;
   const pLabelY = startY + approximateLabelH;
   const pSectionY = pLabelY + cellSize;
@@ -57,13 +61,9 @@ export function getDailyOnlyDoc({
   drawDailyPlanner2(doc, startY, pLabelY - 5, sectionW, pSectionH + cellSize + 5, 9, 17);
   // Draw daily planning section with 30 minutes split for 19 hours of the day starting with 08:00
   drawDailyPlanner2(doc, pSectionX, pLabelY - 5, sectionW, pSectionH + cellSize + 5, 9, 17);
-
-  return doc;
 }
 
-function getDailyDocThicc({ cellSize = 9.5, startingHour = 8 }) {
-  const doc = prepareDoc();
-
+function drawDailyDocThicc(doc, { cellSize, startingHour }) {
   // Top priorities
   const tpBottomY = drawTopSection(doc, startX, startY, sectionW, cellSize)
 
@@ -77,7 +77,7 @@ function getDailyDocThicc({ cellSize = 9.5, startingHour = 8 }) {
   doc.text(pSectionX, startY, "Date:");
   const pLabelY = startY + approximateLabelH;
   const pLabelX = pSectionX + 10.5;
-  doc.line(pLabelX, pLabelY, endX, pLabelY);
+  doc.line(pLabelX, pLabelY, endX, pLabelY, "S");
   const pSectionY = pLabelY + cellSize;
   const pSectionH = endY - pSectionY + cellSize;
 
@@ -87,6 +87,4 @@ function getDailyDocThicc({ cellSize = 9.5, startingHour = 8 }) {
 
   // Draw daily planning section with 30 minutes split for 19 hours of the day starting with 08:00
   drawDailyPlanner(doc, pSectionX, pSectionY, sectionW, pSectionH, 8, 19);
-
-  return doc;
 }

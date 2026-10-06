@@ -15,11 +15,11 @@ export function drawTopSection(doc, x, y, w, cellSize) {
   const tpSectionY = y + 3;
   doc.text(x, y, "Top priorities:");
   const h = cellSize * 3;
-  doc.rect(x, tpSectionY, w, h);
+  doc.rect(x, tpSectionY, w, h, "S");
   const tpFirstLineY = tpSectionY + cellSize;
-  doc.line(x, tpFirstLineY, w + x, tpFirstLineY);
+  doc.line(x, tpFirstLineY, w + x, tpFirstLineY, "S");
   const tpSecondLineY = tpFirstLineY + cellSize;
-  doc.line(x, tpSecondLineY, w + x, tpSecondLineY);
+  doc.line(x, tpSecondLineY, w + x, tpSecondLineY, "S");
 
   return tpSectionY + h;
 }
