@@ -33,8 +33,10 @@ export default function App() {
       <Routes>
         {routes
           .concat(generateRoute)
-          .map(({ path, component: PageComp }) =>
-            <Route key={path} path={path} element={<PageComp />} />)}
+          .flatMap(({ path, component: PageComp }) =>
+            // GitHub Pages also serves the generated .html files directly.
+            [path, path === '/' ? '/index.html' : `${path}.html`].map(pagePath =>
+              <Route key={pagePath} path={pagePath} element={<PageComp />} />))}
       </Routes>
     </>
   );

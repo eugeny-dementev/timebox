@@ -24,6 +24,7 @@ export default function Analytics() {
         tracker.track(properties => ({
           ...properties,
           url,
+          title: document.title,
           referrer: referrer ?? properties.referrer,
         })).catch(() => {});
       } catch {

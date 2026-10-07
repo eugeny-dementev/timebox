@@ -10,17 +10,20 @@ export default function Howto() {
     <main>
       <Attractor pic='timebox-planning-v2.jpg'>
         <Header>
-          Timebox: How to use it to control your time
+          How to timebox your day
         </Header>
         <Descriptor>
-          Learn how to use timeboxing to manage your productivity
+          A practical time management routine: write down your tasks, choose your priorities
+          and schedule focused work with a printable planner.
         </Descriptor>
       </Attractor>
 
       <section className="py-12 px-6">
         <div className="max-w-4xl mx-auto space-y-8">
           <p className="text-lg leading-relaxed">
-            Timeboxing is divided into three sections: dumping, prioritizing, and scheduling.
+            Start with a <Link to="/generate" className="text-green-400 underline">free timeboxing planner PDF</Link>
+            {' '}and a pen. Daily versions v1 and v2 include three sections: a brain dump,
+            top priorities and a schedule. The same routine works with a weekly or monthly overview.
           </p>
 
           <div>
@@ -79,12 +82,35 @@ export default function Howto() {
               </li>
             </ul>
           </div>
+          <div>
+            <h2 className="text-2xl text-green-400 font-bold mb-2">A simple daily timeboxing example</h2>
+            <p className="text-lg leading-relaxed">
+              Suppose your priority is to finish a report. Reserve 9:00–10:00 for a first draft,
+              take a break, then schedule 10:15–10:45 for reviewing it. Put email into a separate
+              timebox instead of checking it throughout the draft. When a timebox ends, review
+              what you completed and decide whether the task needs another block.
+            </p>
+            <p className="text-lg leading-relaxed mt-3">
+              For a weekly plan, spread your priorities across seven days. For a monthly plan,
+              use the 30-day or four-week template to choose milestones before scheduling daily work.
+              Keep some time unallocated so the plan can adapt to appointments or unexpected tasks.
+            </p>
+          </div>
+          <div>
+            <h2 className="text-2xl text-green-400 font-bold mb-2">Download and print your planner</h2>
+            <p className="text-lg leading-relaxed">
+              In the generator, choose day, week or month, then select one A5 planner or two
+              planners on a portrait A4 sheet. Preview your layout and download the PDF.
+              Print at 100% / Actual size; the A4 option includes a cutting guide between its two copies.
+              No account is required.
+            </p>
+          </div>
         </div>
       </section>
 
       <Attractor pic='timebox-pdfs-v2.jpg'>
-        <Header>
-          Timebox: A Symphony of Productivity and Joy
+        <Header as="h2">
+          Download a planner for your next timebox
         </Header>
         <Center>
           <Link to="/generate" className="py-2 px-2 font-big text-white bg-green-500 rounded hover:bg-green-400">

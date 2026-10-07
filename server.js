@@ -3,6 +3,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'url';
 import express from 'express';
 import { basename } from './options.js';
+import { renderPageHead } from './seo.mjs';
 
 console.log('metaUrl:', import.meta.url);
 
@@ -35,7 +36,9 @@ export async function createServer() {
     const render = (await import('./dist/server/entry-server.js')).default;
 
     const appHtml = render(url); //Rendering component without any client side logic de-hydrated like a dry sponge
-    const html = template.replace(`<!--app-html-->`, appHtml); //Replacing placeholder with SSR rendered components
+    const html = template
+      .replace(`<!--app-html-->`, appHtml)
+      .replace(`<!--app-head-->`, renderPageHead(url));
 
     res.status(200).set({ 'Content-Type': 'text/html' }).end(html); //Outputing final html
   });

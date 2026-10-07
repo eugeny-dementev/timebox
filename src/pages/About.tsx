@@ -8,133 +8,106 @@ import { Link } from 'react-router-dom';
 export default function About() {
   return (
     <main>
-      <Attractor pic='timebox-fight-v2.jpg'>
-        <Header>
-          Timebox: A Symphony of Productivity and Joy
-        </Header>
+      <Attractor pic="timebox-fight-v2.jpg">
+        <Header>Free printable timeboxing planners</Header>
         <Descriptor>
-          Timeboxing shines as a beacon of modern time management. It
-          transforms the way we plan our day, week, and month, turning
-          them into a canvas of organized blocks, each representing a
-          specific task or activity
+          Plan your day, week or month with a simple time management tool.
+          Generate a planner PDF, print it and give your priorities a place in your schedule.
+          Free to use, with no account needed.
         </Descriptor>
+        <Center>
+          <Link to="/generate" className="py-3 px-4 text-white bg-green-600 rounded hover:bg-green-500">
+            Create your free PDF planner
+          </Link>
+        </Center>
       </Attractor>
+
       <section className="py-12 px-6">
-        <div className="max-w-4xl mx-auto space-y-8">
-          <p className="text-lg leading-relaxed">
-            Timeboxing, as recently highlighted in a study of 100 productivity
-            hacks, shines as a beacon of modern time management. It transforms
-            the way we plan our day, week, and month, turning them into a canvas
-            of organized blocks, each representing a specific task or
-            activity. Here's an updated and joyful description of how timeboxing
-            can revolutionize your approach to time management:
-          </p>
+        <div className="max-w-4xl mx-auto space-y-8 text-lg leading-relaxed">
+          <div>
+            <h2 className="text-2xl text-green-400 font-bold mb-2">What is timeboxing?</h2>
+            <p>
+              Timeboxing means setting aside a fixed amount of time for a task.
+              Instead of working through an open-ended to-do list, you decide what to work on
+              and when to stop. A time blocking planner makes those decisions visible on paper:
+              focused work, appointments, study sessions, breaks and personal time all have a place.
+            </p>
+            <p className="mt-3">
+              Start with the tasks that matter most, give them realistic time limits and leave room
+              for interruptions. Review your plan as the day changes rather than trying to fill every minute.
+            </p>
+          </div>
 
           <div>
-            <h2 className="text-2xl text-green-400 font-bold mb-2">
-              Daily Delight with Timeboxing
-            </h2>
-            <ul className="list-disc list-inside space-y-2">
+            <h2 className="text-2xl text-green-400 font-bold mb-2">Choose a daily, weekly or monthly planner PDF</h2>
+            <ul className="list-disc pl-6 space-y-3">
               <li>
-                Controlled Sunrise: Begin each day with the power of choice.
-                Decide what tasks will fill your day and dedicate specific time
-                blocks to them, ensuring a blend of important and urgent
-                activities.
+                <strong>Daily planner:</strong> versions v1 and v2 combine top priorities,
+                a brain dump and a timed schedule. Version v3 provides two schedule columns
+                for a plan that needs more writing space.
               </li>
               <li>
-                Distraction-Free Zones: Each timebox is a mini-oasis of focus.
-                During these periods, you're in control, free from distractions,
-                diligently working towards your goals.
+                <strong>Weekly planner:</strong> organize seven days alongside your priorities
+                and notes. Use it to plan recurring commitments and the tasks you want to finish this week.
               </li>
               <li>
-                Sense of Achievement: Completing each timebox is like collecting
-                a star in your daily journey, bringing a sense of accomplishment
-                and progress.
+                <strong>Monthly planner:</strong> choose a 30-day grid or a four-week overview
+                to break larger goals into smaller steps. These are blank planning templates,
+                so you write in your own dates and tasks.
               </li>
             </ul>
           </div>
 
           <div>
-            <h2 className="text-2xl text-green-400 font-bold mb-2">
-              Weekly Wonders with Timeboxing
-            </h2>
-            <ul className="list-disc list-inside space-y-2">
-              <li>
-                Strategic Placement of Tasks: Understanding the interplay of
-                weekly tasks allows for optimal scheduling. It's like a game of
-                strategic placement, ensuring the right tasks are tackled at the
-                right time for maximum efficiency.
-              </li>
-              <li>
-                Collaborative Harmony: Share your timeboxed calendar with
-                colleagues, harmonizing your schedule with theirs. This fosters
-                a collaborative environment, enhancing team productivity and
-                understanding.
-              </li>
-              <li>
-                Reflective Record: Your calendar becomes a tapestry of
-                the week's activities, offering a clear view of accomplishments
-                and areas for growth.
-              </li>
-            </ul>
+            <h2 className="text-2xl text-green-400 font-bold mb-2">Print one A5 planner or two planners on A4</h2>
+            <p>
+              Choose <strong>A5 · 1 planner</strong> for a single planner page.
+              Choose <strong>A4 · 2 planners</strong> for two identical, full-size A5 planners
+              on one portrait A4 sheet. The copies are rotated and stacked, with a faint dashed
+              cutting guide between them. Print at <strong>100% / Actual size</strong> to keep
+              the planner dimensions, then cut the A4 sheet in half if needed.
+            </p>
           </div>
 
           <div>
-            <h2 className="text-2xl text-green-400 font-bold mb-2">
-              Monthly Mastery with Timeboxing
-            </h2>
-            <ul className="list-disc list-inside space-y-2">
-              <li>
-                Big Picture Planning: Timeboxing on a monthly scale allows for a
-                birds-eye view of your goals and progress. It's like
-                constructing a roadmap to success, one timebox at a time.
-              </li>
-              <li>
-                Control and Happiness: Embrace the control timeboxing gives over
-                your month, a key driver in workplace happiness. This method
-                ensures that your time aligns with your priorities, fostering a
-                sense of autonomy and satisfaction.
-              </li>
-              <li>
-                Doubling Productivity: Break free from Parkinson's law, which
-                suggests work expands to fill the time available. Timeboxing
-                imposes disciplined, finite periods for tasks, potentially
-                doubling your productivity.
-              </li>
-            </ul>
+            <h2 className="text-2xl text-green-400 font-bold mb-2">How to download your free planner</h2>
+            <ol className="list-decimal pl-6 space-y-2">
+              <li>Open the <Link to="/generate" className="text-green-400 underline">PDF planner generator</Link>.</li>
+              <li>Choose your paper layout and day, week or month. Pick a daily version or monthly split if needed.</li>
+              <li>Check the preview and select download. Save the PDF, then print it and fill it in by hand.</li>
+            </ol>
+            <p className="mt-3">
+              The PDF is generated in your browser. No registration or subscription is required,
+              and you can print additional copies from your PDF viewer.
+            </p>
           </div>
 
           <div>
-            <h2 className="text-2xl text-green-400 font-bold mb-2">
-              Timeboxing: A Symphony of Productivity and Joy
-            </h2>
-            <ul className="list-disc list-inside space-y-2">
-              <li>
-                Visual and Intuitive: Timeboxing isn't just a method; it's a
-                visual and intuitive approach to managing time. It's like
-                painting your day, week, and month with purposeful strokes.
-              </li>
-              <li>
-                Personal and Professional Growth: This method is a key skill for
-                modern professionals. It's not just about doing more; it's about
-                achieving more, both personally and in teams.
-              </li>
-              <li>
-                Zero Cost, Infinite Value: Implementing timeboxing costs nothing
-                but can yield immeasurable returns in terms of control,
-                productivity, and satisfaction.
-              </li>
-            </ul>
+            <h2 className="text-2xl text-green-400 font-bold mb-2">Questions about the printable planners</h2>
+            <h3 className="font-semibold mt-4">Can I use a planner for work or study?</h3>
+            <p>
+              Yes. Write in tasks such as preparing a presentation, revising a topic or planning a project.
+              Set a time limit for each task and include breaks and other commitments.
+            </p>
+            <h3 className="font-semibold mt-4">Do the PDFs have interactive form fields?</h3>
+            <p>
+              These are blank printable templates for writing on paper. They do not include
+              interactive form fields; a PDF annotation app can be used to add your own notes digitally.
+            </p>
+            <h3 className="font-semibold mt-4">How many sheets are included in a download?</h3>
+            <p>
+              Each download contains one sheet: one A5 planner or two copies on A4.
+              Choose the number of copies in your print dialog.
+            </p>
           </div>
         </div>
       </section>
 
-      <Attractor pic='timebox-win-v2.jpg'>
-        <Header>
-          Timebox: A Symphony of Productivity and Joy
-        </Header>
+      <Attractor pic="timebox-win-v2.jpg">
+        <Header as="h2">Put your priorities into your schedule</Header>
+        <Descriptor>Use a simple routine to turn a blank planner into a realistic plan.</Descriptor>
         <Center>
-          <Link to="/howto" className="py-2 px-2 font-big text-white bg-green-500 rounded hover:bg-green-400">
+          <Link to="/howto" className="py-3 px-4 text-white bg-green-600 rounded hover:bg-green-500">
             Learn how to timebox
           </Link>
         </Center>
